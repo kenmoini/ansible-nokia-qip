@@ -1766,7 +1766,7 @@
                         "schema": {
                             "$ref": "#/definitions/JoinV4AlterSubnetRec"
                         }
-                    },
+                    }
                 ],
                 "responses": {
                     "200": {
@@ -6379,7 +6379,7 @@
             ],
             "properties": {
                 "fromSubnet": {
-                    "type": "string",
+                    "type": "string"
                 },
                 "toSubnets": {
                     "type": "array",
@@ -6389,7 +6389,7 @@
                 },
                 "newMask": {
                     "type": "string"
-                },
+                }
             }
         },
         "JoinV4AlterSubnetRec": {
@@ -6407,14 +6407,14 @@
                     }
                 },
                 "toSubnet": {
-                    "type": "string",
+                    "type": "string"
                 },
                 "newMask": {
                     "type": "string"
                 },
                 "subnetProperties": {
                     "type": "string"
-                },
+                }
             }
         },
         "V4SubnetRec": {
