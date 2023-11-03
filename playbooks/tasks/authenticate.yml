@@ -1,0 +1,22 @@
+---
+- name: Authenticate to the Nokia QIP API and retrieve a token
+  ansible.builtin.uri:
+    url: https://{{ qip_host }}/api/login
+    method: POST
+    body:
+      username: "{{ qip_username }}"
+      password: "{{ qip_password }}"
+    body_format: json
+    validate_certs: false
+    return_content: true
+    status_code: 200
+
+- name: Debug output
+  ansible.builtin.debug:
+    msg: "{{ qip_token_response }}"
+
+- name: Set the token as a fact
+  ansible.builtin.set_fact:
+    qip_token: "{{ qip_token_response.json.authentication }}"
+    qip_token_date: "{{ qip_token_response.json.date }}"
+    qip_token_expiration: "{{ qip_token_response.json.expiration_time }}"

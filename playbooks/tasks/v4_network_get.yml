@@ -1,0 +1,16 @@
+---
+- name: Get a V4 Network
+  ansible.builtin.uri:
+    url: https://{{ qip_host }}/api/v1/{{ org_name }}/v4network/{{ v4_network_id }}.{{ response_extension }}
+    method: GET
+    headers:
+      Authentication: "{{ qip_token }}"
+    body_format: json
+    validate_certs: false
+    return_content: true
+    status_code: 200
+  register: qip_get_v4_network_response
+
+- name: Debug output
+  ansible.builtin.debug:
+    msg: "{{ qip_get_v4_network_response }}"

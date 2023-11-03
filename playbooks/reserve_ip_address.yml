@@ -1,0 +1,37 @@
+---
+- name: Reserve an IP Address
+  hosts: localhost
+  gather_facts: false
+
+  vars:
+    qip_host: qip.example.com
+    qip_username: admin
+    qip_password: password
+
+    org_name: EvilCorp
+    response_extension: json
+
+    v4_subnet_id: 10.0.0.0
+
+  tasks:
+
+    - name: Authenticate to QIP
+      ansible.builtin.include_tasks:
+        file: tasks/authenticate.yml
+
+    - name: Get the list of IP addresses in a Subnet
+      ansible.builtin.include_tasks:
+        file: tasks/v4_subnet_get_addresses.yml
+
+    - name: Find the first available IP address and set it as a fact
+      when: ip_item.macAddr == "" and ip_item.objectName == ""
+      ansible.builtin.set_fact:
+        next_available_ip: "{{ ip_item }}"
+      loop: "{{ v4_subnet_ip_list }}"
+      loop_control:
+        loop_var: ip_item
+        label: "{{ ip_item.objectAddr }}"
+
+    - name: Debug output
+      ansible.builtin.debug:
+        msg: "{{ next_available_ip }}"
