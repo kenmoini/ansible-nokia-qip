@@ -1,6 +1,6 @@
 # Ansible Automation for Nokia QIP
 
-[API Reference](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/kenmoini/ansible-nokia-qip/main/api.json#/)
+[API Reference](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/kenmoini/ansible-nokia-qip/main/api-definition/api.json#/)
 
 This repo contains basic automation for Nokia's QIP IPAM system.
 
