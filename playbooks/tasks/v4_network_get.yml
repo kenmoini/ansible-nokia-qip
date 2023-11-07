@@ -1,7 +1,7 @@
 ---
 - name: Get a V4 Network
   ansible.builtin.uri:
-    url: https://{{ qip_host }}/rest-api/v1/{{ org_name }}/v4network/{{ v4_network_id }}.{{ response_extension }}
+    url: https://{{ qip_host }}/api/v1/{{ org_name }}/v4network/{{ v4_network_id }}.{{ response_extension }}
     method: GET
     headers:
       Authentication: "{{ qip_token }}"

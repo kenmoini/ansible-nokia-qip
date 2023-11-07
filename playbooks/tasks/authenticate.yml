@@ -1,7 +1,7 @@
 ---
 - name: Authenticate to the Nokia QIP API and retrieve a token
   ansible.builtin.uri:
-    url: https://{{ qip_host }}/rest-api/login
+    url: https://{{ qip_host }}/api/login
     method: POST
     body:
       username: "{{ qip_username }}"
