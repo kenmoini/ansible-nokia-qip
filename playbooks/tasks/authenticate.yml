@@ -18,6 +18,6 @@
 
 - name: Set the token as a fact
   ansible.builtin.set_fact:
-    qip_token: "{{ qip_token_response.json.authentication }}"
-    qip_token_date: "{{ qip_token_response.json.date }}"
-    qip_token_expiration: "{{ qip_token_response.json.expire_time }}"
+    qip_token: "{{ qip_token_response.authentication }}"
+    qip_token_date: "{{ qip_token_response.date }}"
+    qip_token_expiration: "{{ qip_token_response.expire_time }}"
