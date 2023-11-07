@@ -1,0 +1,301 @@
+{
+    "update": {
+        "put": {
+            "description": "Update VitalQIP's SAML Configuration. To leave a field value unchanged in the configuration, exclude it from the request body.",
+            "operationId": "updateSamlConfiguration",
+            "summary": "Update SAML Configuration",
+            "tags": [
+                "SAML Configuration"
+            ],
+            "produces": [
+                "application/json",
+                "application/xml"
+            ],
+            "parameters": [
+                {
+                    "name": "Authentication",
+                    "in": "header",
+                    "description": "Token tokenValue<br>or<br>\nBasic username:password<br>or<br>\nLeave blank if using Client Certificate Authentication\n",
+                    "required": false,
+                    "type": "string",
+                    "format": "string"
+                },
+                {
+                    "name": "requestBody",
+                    "in": "body",
+                    "description": "The SAML Configuration request body",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/definitions/SamlConfigurationRec"
+                    }
+                }
+            ],
+            "responses": {
+                "200": {
+                    "description": "OK",
+                    "schema": {
+                        "type": "string"
+                    }
+                },
+                "400": {
+                    "description": "Required Field(s) Missing: [field]\n\nField value is not correct [privateEncryptionKey]. Invalid base64 encoded string.\n\nField value is not correct [privateEncryptionKey]. Invalid key spec.\n\nField [encryptionCertificate] must be an unexpired base-64 encoded X.509 certificate\n\nField value is not correct [hashAlgorithm]. Only the case-sensitive values of \"SHA1\" and \"SHA256\" are allowed.",
+                    "schema": {
+                        "type": "string"
+                    }
+                },
+                "403": {
+                    "description": "Invalid permissions for the requested operation",
+                    "schema": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    },
+    "get": {
+        "get": {
+            "description": "Get SAML Configuration",
+            "operationId": "getSamlConfiguration",
+            "summary": "Get SAML Configuration",
+            "tags": [
+                "SAML Configuration"
+            ],
+            "consumes": [
+                "application/json",
+                "application/xml"
+            ],
+            "parameters": [
+                {
+                    "name": "Authentication",
+                    "in": "header",
+                    "description": "Token tokenValue<br>or<br>\nBasic username:password<br>or<br>\nLeave blank if using Client Certificate Authentication\n",
+                    "required": false,
+                    "type": "string",
+                    "format": "string"
+                },
+                {
+                    "in": "path",
+                    "name": "extension",
+                    "description": ".json for a response in JSON format.<br> \n.xml for a response in XML format.\n",
+                    "required": true,
+                    "type": "string",
+                    "enum": [
+                        ".json",
+                        ".xml"
+                    ]
+                }
+            ],
+            "responses": {
+                "200": {
+                    "description": "OK",
+                    "schema": {
+                        "$ref": "#/definitions/SamlConfigurationRec"
+                    }
+                },
+                "403": {
+                    "description": "Invalid permissions for the requested operation.",
+                    "schema": {
+                        "type": "string"
+                    }
+                },
+                "404": {
+                    "description": "Saml configuration not found.",
+                    "schema": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    },
+    "getRunning": {
+        "get": {
+            "description": "Get running version of the SAML Configuration",
+            "operationId": "getRunningSamlConfiguration",
+            "summary": "Get running configuration",
+            "tags": [
+                "SAML Configuration"
+            ],
+            "parameters": [
+                {
+                    "name": "Authentication",
+                    "in": "header",
+                    "description": "Token tokenValue<br>or<br>\nBasic username:password<br>or<br>\nLeave blank if using Client Certificate Authentication\n",
+                    "required": false,
+                    "type": "string",
+                    "format": "string"
+                },
+                {
+                    "name": "Content-Type",
+                    "in": "header",
+                    "required": true,
+                    "type": "string",
+                    "format": "string",
+                    "enum": [
+                        "application/json",
+                        "application/xml"
+                    ]
+                },
+                {
+                    "in": "path",
+                    "name": "extension",
+                    "description": ".json for a response in JSON format.<br> \n.xml for a response in XML format.\n",
+                    "required": true,
+                    "type": "string",
+                    "enum": [
+                        ".json",
+                        ".xml"
+                    ]
+                }
+            ],
+            "responses": {
+                "200": {
+                    "description": "OK",
+                    "schema": {
+                        "$ref": "#/definitions/SamlRunningConfigurationRec"
+                    }
+                },
+                "404": {
+                    "description": "Saml configuration not found.",
+                    "schema": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "SamlConfigurationRec": {
+            "type": "object",
+            "description": "SAML Configuration",
+            "required": [
+                "samlIdpName",
+                "assertionConsumerUrl",
+                "privateEncryptionKey",
+                "encryptionCertificate",
+                "hashAlgorithm"
+            ],
+            "properties": {
+                "enable": {
+                    "type": "bool",
+                    "description": "Enable/Disable the Login with SAML"
+                },
+                "samlIdpName": {
+                    "type": "string",
+                    "description": "Required. Name of the SAML Identity Provider that will be used for SAML Configuration"
+                },
+                "assertionConsumerUrl": {
+                    "type": "string",
+                    "description": "Required. The Assertion Consumer URL in Service Provider side (QIP side). This field is READ-ONLY, it's use to register QIP with the SAML Identity Provider"
+                },
+                "singleLogoutUrl": {
+                    "type": "string",
+                    "description": "Optional. URL at Service Provider side (QIP side) that will be used for Single Logout. This field is READ-ONLY, it's use to register QIP with the SAML Identity Provider."
+                },
+                "entityId": {
+                    "type": "string",
+                    "description": "The entity ID of Service Provider side (QIP side) that will be used to identify SAML node"
+                },
+                "privateEncryptionKey": {
+                    "type": "string",
+                    "description": "Required. The base-64 ENCODED Key in Service Provider side (QIP side) that will be used in encrypting SAML requests"
+                },
+                "encryptionCertificate": {
+                    "type": "string",
+                    "description": "Required. The base-64 ENCODED Certificate in Service Provider side (QIP side) that will be used in encrypting SAML requests"
+                },
+                "hashAlgorithm": {
+                    "type": "string",
+                    "description": "The cryptographic algorithm that computes the digest of the digital signatures in the SAML protocol messages. Either \"SHA-1\" or \"SHA-256\"."
+                }
+            },
+            "example": {
+                "enable": true,
+                "samlIdpName": "ADFS QIP1",
+                "assertionConsumerUrl": "https://vitalqip.example.com:743/saml/SSO",
+                "singleLogoutUrl": "https://vitalqip.example.com:743/saml/SingleLogout",
+                "entityId": "https://vitalqip.example.com:743/saml/metadata",
+                "privateEncryptionKey": "MIIDRzCCAi+gAwIBAgIEBrAUNDANBgkqhkiG9w0BAQsFADBMQswCQYDVQQGEwJWTjENMAsGA1...",
+                "encryptionCertificate": "MIIDRzCCAi+gAwIBAgIEBrAUNDANBgkqhkiG9w0BAQsFADBMQswCQYDVQQGEwJWTjENMAsGA1...",
+                "hashAlgorithm": "SHA256"
+            }
+        },
+        "SamlRunningConfigurationRec": {
+            "type": "object",
+            "description": "SAML Configuration",
+            "required": [
+                "samlIdpName",
+                "privateEncryptionKey",
+                "encryptionCertificate",
+                "hashAlgorithm"
+            ],
+            "properties": {
+                "enable": {
+                    "type": "bool",
+                    "description": "Indicate the SSO with SAML is enable/disable"
+                },
+                "samlIdpName": {
+                    "type": "string",
+                    "description": "Name of the SAML Identity Provider that is used for SAML Configuration"
+                },
+                "samlIdp": {
+                    "type": "object",
+                    "$ref": "../infrastructures/saml-identity-provider.json#/definitions/SamlIdpRec",
+                    "description": "The SAML Identity Provider profile"
+                },
+                "assertionConsumerUrl": {
+                    "type": "string",
+                    "description": "The Assertion Consumer URL in Service Provider side (QIP side). This field is READ-ONLY, it's use to register QIP with the SAML Identity Provider"
+                },
+                "singleLogoutUrl": {
+                    "type": "string",
+                    "description": "URL at Service Provider side (QIP side) that will be used for Single Logout. This field is READ-ONLY, it's use to register QIP with the SAML Identity Provider."
+                },
+                "entityId": {
+                    "type": "string",
+                    "description": "The entity ID of Service Provider side (QIP side) that will be used to identify SAML node"
+                },
+                "privateEncryptionKey": {
+                    "type": "string",
+                    "description": "The base-64 ENCODED Key in Service Provider side (QIP side) that will be used in encrypting SAML requests"
+                },
+                "encryptionCertificate": {
+                    "type": "string",
+                    "description": "The base-64 ENCODED Certificate in Service Provider side (QIP side) that will be used in encrypting SAML requests"
+                },
+                "hashAlgorithm": {
+                    "type": "string",
+                    "description": "The cryptographic algorithm that computes the digest of the digital signatures in the SAML protocol messages. Either \"SHA-1\" or \"SHA-256\"."
+                },
+                "nextReloadTime": {
+                    "type": "string",
+                    "description": "The next reload time of SAML configuration"
+                }
+            },
+            "example": {
+                "enable": true,
+                "samlIdpName": "ADFS QIP1",
+                "samlIdp": {
+                    "name": "ADFS QIP",
+                    "newName": "ADFS QIP1",
+                    "active": true,
+                    "entityId": "https://idp.example.com/adfs/services/trust",
+                    "singleSignOnUrl": "https://idp.example.com/adfs/ls",
+                    "singleSignOnMethod": "Redirect",
+                    "singleLogoutUrl": "https://idp.example.com/adfs/ls",
+                    "singleLogoutMethod": "POST",
+                    "signingCertificate": "MIIDRzCCAi+gAwIBAgIEBrAUNDANBgkqhkiG9w0BAQsFADBMQswCQYDVQQGEwJWTjENMAsGA1...",
+                    "useSigningForEncryption": false,
+                    "encryptionCertificate": "MIIDRzCCAi+gAwIBAgIEBrAUNDANBgkqhkiG9w0BAQsFADBMQswCQYDVQQGEwJWTjENMAsGA1...",
+                    "lastUpdateDate": "2017-03-28 11:25:27.656"
+                },
+                "assertionConsumerUrl": "https://vitalqip.example.com/saml/asert",
+                "singleLogoutUrl": "https://idp.example.com/saml/logout",
+                "entityId": "https://idp.example.com/saml/metadata",
+                "privateEncryptionKey": "MIIDRzCCAi+gAwIBAgIEBrAUNDANBgkqhkiG9w0BAQsFADBMQswCQYDVQQGEwJWTjENMAsGA1...",
+                "encryptionCertificate": "MIIDRzCCAi+gAwIBAgIEBrAUNDANBgkqhkiG9w0BAQsFADBMQswCQYDVQQGEwJWTjENMAsGA1...",
+                "hashAlgorithm": "SHA256",
+                "nextReloadTime": "2017-06-20 09:16 ICT"
+            }
+        }
+    }
+}

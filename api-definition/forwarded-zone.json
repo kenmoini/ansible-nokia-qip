@@ -1,0 +1,416 @@
+{
+	"post" : {
+		"description" : "Create a new forwarded zone\n",
+		"operationId" : "addForwardedZone",
+		"summary" : "Create forwarded zone",
+		"tags" : ["Zone"],
+		"produces" : ["application/json", "application/xml"],
+		"parameters" : [{
+			"name" : "Authentication",
+			"in" : "header",
+			"description" : "Token tokenValue<br>or<br>\nBasic username:password<br>or<br>\nLeave blank if using Client Certificate Authentication\n",
+			"required" : false,
+			"type" : "string",
+			"format" : "string"
+		}, {
+			"in" : "path",
+			"name" : "orgName",
+			"description" : "Organization Name",
+			"required" : true,
+			"type" : "string"
+		}, {
+			"name" : "requestBody",
+			"in" : "body",
+			"description" : "The forwarded zone request body",
+			"required" : true,
+			"schema" : {
+				"$ref" : "#/definitions/ForwardedZone"
+			}
+		}],
+		"responses" : {
+			"201" : {
+				"description" : "Created.\n\nCreated a forwarded zone <name> successfully. Fail to associate DNS Servers to forwarded zone. You do not have appropriate privileges to perform this action for Server."
+			},
+			"400" : {
+				"description" : "\nRequired Field(s) Missing: &lt;name&gt;.\n\nInvalid IP address &lt;ipAddress&gt;\n\nPort [&lt;port&gt;] Invalid. It must be in [0-65536].\n\nUDA &lt;uda&gt; is not associated with the given infrastructure.\n\nUDA Group &lt;udagroup&gt; is not associated with the given infrastructure.\n\nUDA &lt;uda&gt; is required.\n\nUDA &lt;uda&gt;'s value is required.\n\nUDA &lt;uda&gt; in group &lt;group&gt; is required.\n\nUDA &lt;uda&gt;'s value in group &lt;group&gt; is required.\n"
+			},
+			"403" : {
+				"description" : "Invalid permissions for the requested operation.\n Cannot add forwarded server &lt;dnsServer&gt; to &lt;forwardedZoneName&gt;: Permission Denied. You do not have appropriate privileges to perform this action for Server. \n"
+			},
+			"404" : {
+				"description" : "DNS Server not found: [&lt;dnsServers&gt;]\n"
+			},
+			"409" : {
+				"description" : "Cannot save the zone &lt;zone&gt;: It already exists in database.\n"
+			}		
+		}
+	},
+	"modifyDeleteForwardedZone" : {
+		"put" : {
+			"description" : "Modify a forwarded zone.\n",
+			"operationId" : "modifyForwardedZone",
+			"summary" : "Modify a forwarded zone",
+			"tags" : ["Zone"],
+			"produces" : ["application/json", "application/xml"],
+			"parameters" : [{
+				"name" : "Authentication",
+				"in" : "header",
+				"description" : "Token tokenValue<br>or<br>\nBasic username:password<br>or<br>\nLeave blank if using Client Certificate Authentication\n",
+				"required" : false,
+				"type" : "string",
+				"format" : "string"
+			}, {
+				"in" : "path",
+				"name" : "orgName",
+				"description" : "Organization Name",
+				"required" : true,
+				"type" : "string"
+			}, {
+				"in" : "path",
+				"name" : "forwardedZoneName",
+				"description" : "Forwarded zone name",
+				"required" : true,
+				"type" : "string"
+			}, {
+				"name" : "requestBody",
+				"in" : "body",
+				"description" : "The zone request body",
+				"required" : true,
+				"schema" : {
+					"$ref" : "#/definitions/modify/ForwardedZone"
+				}
+			}],
+			"responses" : {
+				"200" : {
+				"description" : "OK.\n\nUpdated a forwarded zone <name> successfully. Fail to associate DNS Servers to forwarded zone. You do not have appropriate privileges to perform this action for Server."
+				},
+				"400" : {
+					"description" : "Invalid IP address &lt;IpAddress&gt;\n\nPort [&lt;port&gt;] Invalid. It must be in [0-65536].\n\n\nUDA &lt;uda&gt; is required.\n\n\nUDA &lt;uda&gt;'s value is required.\n\n\nUDA &lt;uda&gt; in group &lt;group&gt; is required.\n\n\nUDA &lt;uda&gt;'s value in group &lt;group&gt; is required.\n"
+				},
+				"403" : {
+				"description" : "Invalid permissions for the requested operation.\n Cannot remove forwarded server &lt;dnsServer&gt; from &lt;forwardedZoneName&gt;: Permission Denied. You do not have appropriate privileges to perform this action for Server.\nCannot add forwarded server &lt;dnsServer&gt; to &lt;forwardedZoneName&gt;: Permission Denied. You do not have appropriate privileges to perform this action for Server. \n"
+				},
+				"404" : {
+					"description" : "DNS Server not found: [&lt;dnsServer&gt;].\n\nFowarded zone not found: [&lt;forwardedZoneName&gt;].\n"
+				}
+			}
+		},
+		 "delete": {
+                "description": "Delete a forwarded zone by name.\n",
+                "summary": "Delete a forwarded zone.",
+                "operationId": "deleteForwardedZone",
+                "tags": [
+                    "Zone"
+                ],
+                "consumes": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "produces": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "parameters": [
+                    {
+                        "name": "Authentication",
+                        "in": "header",
+                        "description": "Token tokenValue<br>or<br>\nBasic username:password<br>or<br>\nLeave blank if using Client Certificate Authentication\n",
+                        "required": false,
+                        "type": "string",
+                        "format": "string"
+                    },
+                     {
+                        "name": "Content-Type",
+                        "in": "header",
+                        "required": true,
+                        "type": "string",
+                        "format": "string",
+                        "enum": [
+                            "application/json",
+                            "application/xml"
+                        ]
+                    },
+                    {
+                        "in": "path",
+                        "name": "orgName",
+                        "description": "Organization Name",
+                        "required": true,
+                        "type": "string"
+                    },
+                     {
+				"in" : "path",
+				"name" : "forwardedZoneName",
+				"description" : "Forwarded zone name",
+				"required" : true,
+				"type" : "string"
+			}],
+			"responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "403" : {
+				"description" : "Invalid permissions for the requested operation.\n"
+					},
+                    "404": {
+                        "description": "Forwarded Zone not found: [&lt;forwardedZoneName&gt;].\n"
+                    },
+                    "500": {
+                        "description": "Cannot delete the forwarded zone [&lt;forwardedZoneName&gt;].It contains a server.\n"
+                    }
+                    
+                }
+            }
+	},
+	"getForwardedZone" : {
+		"get" : {
+			"description" : "Get profile of a forwarded zone by name",
+			"summary" : "Get Forwarded Zone",
+			"operationId" : "getForwardedZone",
+			"consumes" : ["application/json", "application/xml"],
+			"produces" : ["application/json", "application/xml"],
+			"tags" : ["Zone"],
+			"parameters" : [{
+				"name" : "Authentication",
+				"in" : "header",
+				"description" : "Token tokenValue<br>or<br>\nBasic username:password<br>or<br>\nLeave blank if using Client Certificate Authentication\n",
+				"required" : false,
+				"type" : "string",
+				"format" : "string"
+			},
+			 {
+                        "name": "Content-Type",
+                        "in": "header",
+                        "required": true,
+                        "type": "string",
+                        "format": "string",
+                        "enum": [
+                            "application/json",
+                            "application/xml"
+                        ]
+                    },
+			{
+				"in" : "path",
+				"name" : "orgName",
+				"description" : "Organization Name",
+				"required" : true,
+				"type" : "string"
+			}, {
+				"in" : "path",
+				"name" : "extension",
+				"description" : ".json for a response in JSON format.<br> \n.xml for a response in XML format.\n",
+				"required" : true,
+				"type" : "string",
+				"enum" : [".json", ".xml"]
+			}, {
+				"in" : "path",
+				"name" : "forwardedZoneName",
+				"description" : "Forwarded zone name",
+				"required" : true,
+				"type" : "string"
+			}],
+			"responses" : {
+				"200" : {
+					"description" : "OK",
+					"schema" : {
+						"$ref" : "#/definitions/ForwardedZone"
+					}
+				},
+				"403" : {
+				"description" : "Invalid permissions for the requested operation.\n"
+				},
+				"404" : {
+					"description" : "Forwarded Zone Not Found\n"
+				}
+			}
+		}
+	},
+	"definitions" : {
+		"ForwardedZone" : {
+			"type" : "object",
+			"required" : ["name"],
+			"description" : "This section defines a group of operations for adding a forwarded zone. Different messages, \nand capabilities, are provided to handle the adding. Add, Get and Update actions support \nare supported. \n",
+			"properties" : {
+				"name" : {
+					"type" : "string",
+					"description" : "Name of the forwarded zone.\n"
+				},
+				"forwardersList" : {
+					"type" : "array",
+					"items" : {
+						"$ref" : "#/definitions/ForwardersList"
+					}
+				},
+				"forward" : {
+					"type" : "string",
+					"description" : "Forward options: Use Server Value|forward only| forward first\n"
+				},
+				"dnsServers" : {
+					"type" : "array",
+					"items" : {
+						"$ref" : "#/definitions/DNSServer"
+					}
+				},
+				"udas" : {
+					"$ref" : "#/definitions/NameValue"
+				},
+				"groups" : {
+					"$ref" : "#/definitions/UdaGroup"
+				}
+			},
+			"example" : {
+				"name": "nokia.com",
+				"forwardersList": [
+					{
+						"ipAddress": "192.168.99.98",
+						"port": 5000
+					},
+					{
+						"ipAddress": "2000::1",
+						"port": 5001
+					}
+				],
+				"forward": "Use Server Value",
+				"dnsServers" : [
+					"dns.example.com", "dnsserver.example.com"
+				],
+				"udas" : [{
+							"name" : "at1",
+							"value" : "true"
+						}, {
+							"name" : "test",
+							"value" : "vietnam"
+						}],
+				"groups" : [{
+							"name" : "gr1",
+							"udas" : [{
+										"name" : "at1",
+										"value" : "false"
+									}]
+						}, {
+							"name" : "gr2",
+							"udas" : [{
+										"name" : "testUDA",
+										"value" : "false"
+									}]
+						}]
+			}
+		},
+		"modify" : {
+			"ForwardedZone":{
+			"type" : "object",
+			"required" : ["name"],
+			"description" : "This section defines a group of operations for adding a forwarded zone. Different messages, \nand capabilities, are provided to handle the adding. Add, Get and Update actions support \nare supported. \n",
+			"properties" : {
+				"forwardersList" : {
+					"type" : "array",
+					"items" : {
+						"$ref" : "#/definitions/ForwardersList"
+					}
+				},
+				"forward" : {
+					"type" : "string",
+					"description" : "Forward options: Use Server Value|forward only| forward first\n"
+				},
+				"dnsServers" : {
+					"type" : "array",
+					"items" : {
+						"$ref" : "#/definitions/DNSServer"
+					}
+				},
+				"udas" : {
+					"$ref" : "#/definitions/NameValue"
+				},
+				"groups" : {
+					"$ref" : "#/definitions/UdaGroup"
+				}
+			},
+			"example" : {
+				"forwardersList": [
+					{
+						"ipAddress": "192.168.99.98",
+						"port": 5000
+					},
+					{
+						"ipAddress": "2000::1",
+						"port": 5001
+					}
+				],
+				"forward": "Use Server Value",
+				"dnsServers" : [
+					"dns.example.com", "dnsserver.example.com"
+				],
+				"udas" : [{
+							"name" : "at1",
+							"value" : "true"
+						}, {
+							"name" : "test",
+							"value" : "vietnam"
+						}],
+				"groups" : [{
+							"name" : "gr1",
+							"udas" : [{
+										"name" : "at1",
+										"value" : "false"
+									}]
+						}, {
+							"name" : "gr2",
+							"udas" : [{
+										"name" : "testUDA",
+										"value" : "false"
+									}]
+						}]
+			}
+				}
+		},
+		"UdaGroup": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "udas": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/NameValue"
+                    }
+                }
+            }
+        },
+        "NameValue": {
+            "type": "object",
+            "required": [
+                "name",
+                "value"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
+        "DNSServer": {
+            "type": "string",
+            "description": "Name of DNS server"
+        },
+        "ForwardersList": {
+        	"type": "object",
+        	"description": "Address",
+        	"required": [
+        		"ipAddress"
+        	],
+        	"properties": {
+        		"ipAddress": {
+        			"type": "string",
+        			"description": "ipAddress"
+        		},
+        		"port" :{
+        		"type": "integer",
+        			"description": "port"
+        		}
+        	}
+        }
+	}
+}

@@ -1,0 +1,143 @@
+{
+	"put" : {
+		"summary" : "Move one or more object(s) by IPv6 address.",
+		"description" : "Move one or more object(s) by IPv6 address.",
+		"operationId" : "movev6object",
+		"tags" : ["V6 Address"],
+		"consumes" : ["application/json", "application/xml"],
+		"produces" : ["application/json", "application/xml"],
+		"parameters" : [{
+			"name" : "Authentication",
+			"in" : "header",
+			"description" : "Token tokenValue<br>or<br>\nBasic loginName:password<br>or<br>\nLeave blank if using Client Certificate Authentication\n",
+			"required" : false,
+			"type" : "string"
+		}, {
+			"name" : "Content-Type",
+			"in" : "header",
+			"required" : true,
+			"type" : "string",
+			"enum" : ["application/json", "application/xml"]
+		}, {
+			"in" : "path",
+			"name" : "orgName",
+			"description" : "Organization Name",
+			"required" : true,
+			"type" : "string"
+		}, {
+			"name" : "requestBody",
+			"in" : "body",
+			"description" : "Request body",
+			"required" : true,
+			"schema" : {
+				"$ref" : "#/definitions/list"
+			}
+		}],
+		"responses" : {
+			"200" : {
+				"description" : "Response entity list",
+				"schema" : {
+					"type" : "array",
+					"items" : {
+						"$ref" : "#/definitions/ResponseEntity"
+					}
+				}
+			},
+			"400" : {
+				"description" : "The input is invalid."
+			},
+			"403" : {
+				"description" : "Invalid permissions for the requested operation."
+			}
+		}
+	},
+	"definitions" : {
+		"list" : {
+			"type" : "object",
+			"properties" : {
+				"V6ObjectMoveRest" : {
+					"type" : "array",
+					"items" : {
+						"$ref" : "#/definitions/V6ObjectMoveRest"
+					}
+				}
+			},
+			"example" : {
+				"list" : [{
+							"objIPAddress" : "2005::2",
+							"destinationAddress" : "2009::2",
+							"moveOption" : "Assign"
+						}, {
+							"objIPAddress" : "2005::1",
+							"destinationAddress" : "1000::",
+							"moveOption" : "Auto",
+							"force" : "true"
+						}, {
+							"objIPAddress" : "2005::3",
+							"destinationAddress" : "2008::",
+							"moveOption" : "Auto",
+							"scheduleDate" : "08/30/2019 00:00"
+						}]
+			}
+		},
+		"V6ObjectMoveRest" : {
+			"type" : "object",
+			"description" : "V6 Address Rest Model",
+			"required" : ["objIPAddress", "destinationAddress", "moveOption"],
+			"properties" : {
+				"objIPAddress" : {
+					"type" : "string",
+					"description" : "Object IP address."
+				},
+				"destinationAddress" : {
+					"type" : "string",
+					"description" : "Destination address."
+				},
+				"moveOption" : {
+					"type" : "string",
+					"description" : "IPv6 address move option. It has two values: Assign, Auto"
+				},
+				"force" : {
+					"type" : "string",
+					"description" : "Force to move an IPv6 address which is associated to the server. It has two values: true, false. The default value is false."
+				},
+				"scheduleDate" : {
+					"type" : "string",
+					"description" : "If you including this filed in the request body that mean the IPv6 will move with scheduled. The date format allow such as MM/dd/yyyy hh:mm, yyyy-MM-dd'T'HH:mm:ss.SSSZ, yyyy-MM-dd hh:mm, yyyy-MM-dd hh:mm z, yyyyMMdd'T'hhmmZ, yyyy-MM-dd'T'HH:mm:ss.SSSX, yyyy-MM-dd h:mma, MMM d HH:mm yyyy, EEE MMM d HH:mm:ss zzz yyyy"
+				}
+			}
+		},
+		"ResponseEntity" : {
+			"type" : "object",
+			"description" : "Response entity",
+			"properties" : {
+				"headers" : {
+					"type" : "string"
+				},
+				"body" : {
+					"type" : "string"
+				},
+				"statusCode" : {
+					"type" : "string"
+				}
+			},
+			"example" : {
+				"list" : [{
+					"message" : "Moving V6 Object from 2005::2 to 2008::6 is successful."
+				}, {
+					"message" : "Moving V6 Object from 2005::3 to 2006:: is successful.",
+					"messageDetail" : "Destination Address: 2006::2. Scheduled At: Move V6 Object from 2005::3 to 2006::1. Job id is: 20."
+				}, {
+					"message" : "Moving V6 Object from 2005::8 to 2006:: is failed.",
+					"messageDetail" : "Cannot move the IPv6 Address 2005::8 which has associated with server(s)."
+				}, {
+					"message" : "Moving V6 Object from 2005::1 to 2006::6 is failed.",
+					"messageDetail" : "Could not find IPv6 Address 2005::1."
+				}, {
+					"message" : "Moving V6 Object from 2005::5 to 2007::12 is failed.",
+					"messageDetail" : "The scheduled time is not in a date format."
+				}]
+			}
+		}
+	}
+}

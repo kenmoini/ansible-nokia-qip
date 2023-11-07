@@ -1,0 +1,148 @@
+{
+	"put" : {
+		"summary" : "Move an object by IP address.",
+		"description" : "Move an object by IP address.",
+		"operationId" : "movev4object",
+		"tags" : ["V4 Address"],
+		"consumes" : ["application/json", "application/xml"],
+		"produces" : ["application/json", "application/xml"],
+		"parameters" : [{
+			"name" : "Authentication",
+			"in" : "header",
+			"description" : "Token tokenValue<br>or<br>\nBasic loginName:password<br>or<br>\nLeave blank if using Client Certificate Authentication\n",
+			"required" : false,
+			"type" : "string"
+		}, {
+			"name" : "Content-Type",
+			"in" : "header",
+			"required" : true,
+			"type" : "string",
+			"enum" : ["application/json", "application/xml"]
+		}, {
+			"in" : "path",
+			"name" : "orgName",
+			"description" : "Organization Name",
+			"required" : true,
+			"type" : "string"
+		}, {
+			"name" : "requestBody",
+			"in" : "body",
+			"description" : "Request body",
+			"required" : true,
+			"schema" : {
+				"$ref" : "#/definitions/list"
+			}
+		}],
+		"responses" : {
+			"200" : {
+				"description" : "Response entity list",
+				"schema" : {
+					"type" : "array",
+					"items" : {
+						"$ref" : "#/definitions/ResponseEntity"
+					}
+				}
+			},
+			"400" : {
+				"description" : "The input is invalid."
+			}
+		}
+	},
+	"definitions" : {
+		"list" : {
+			"type" : "object",
+			"properties" : {
+				"V4ObjectRest" : {
+					"type" : "array",
+					"items" : {
+						"$ref" : "#/definitions/V4ObjectRest"
+					}
+				}
+			},
+			"example" : {
+				"list" : [{
+							"objIPAddress" : "192.168.99.3",
+							"destinationAddress" : "192.168.99.99",
+							"moveOption" : "Assign"
+						}, {
+							"objIPAddress" : "192.168.88.1",
+							"destinationAddress" : "192.168.99.0",
+							"moveOption" : "Auto"
+						}, {
+							"objIPAddress" : "192.168.88.2",
+							"destinationAddress" : "192.168.99.9",
+							"moveOption" : "Assign",
+							"scheduleDate" : "11/28/2018 00:00"
+						}]
+			}
+		},
+		"V4ObjectRest" : {
+			"type" : "object",
+			"description" : "V4 Object Rest Model",
+			"required" : ["objIPAddress", "destinationAddress", "moveOption"],
+			"properties" : {
+				"objIPAddress" : {
+					"type" : "string",
+					"description" : "Object IP address."
+				},
+				"destinationAddress" : {
+					"type" : "string",
+					"description" : "Destination address."
+				},
+				"moveOption" : {
+					"type" : "string",
+					"description" : "Object move option. It has two values: Assign, Auto"
+				},
+				"scheduleDate" : {
+					"type" : "string",
+					"description" : "If you including this filed in the request body that mean the IPv4 Object will move with scheduled. The date format allow such as MM/dd/yyyy hh:mm, yyyy-MM-dd'T'HH:mm:ss.SSSZ, yyyy-MM-dd hh:mm, yyyy-MM-dd hh:mm z, yyyyMMdd'T'hhmmZ, yyyy-MM-dd'T'HH:mm:ss.SSSX, yyyy-MM-dd h:mma, MMM d HH:mm yyyy, EEE MMM d HH:mm:ss zzz yyyy"
+				}
+			}
+		},
+		"ResponseEntity" : {
+			"type" : "object",
+			"description" : "Response entity",
+			"properties" : {
+				"headers" : {
+					"type" : "string"
+				},
+				"body" : {
+					"type" : "string"
+				},
+				"statusCode" : {
+					"type" : "string"
+				}
+			},
+			"example" : {
+				"list" : [{
+					"message" : "Moving V4 Object from 192.168.88.2 to 192.168.99.10 is sucessful.",
+					"messageDetail": "Moved from: 192.168.88.2 to: 192.168.99.10"
+				}, {
+					"message" : "Moving V4 Object from 192.168.88.5 to 192.168.77.0 is failed.",
+					"messageDetail" : "Destination subnet does not exist 192.168.77.0"
+				}, {
+					"message" : "Moving V4 Object from 192.168.88.5 to 192.168.77.1 is failed.",
+					"messageDetail" : "Subnet Move CLI qip-move error C:\\qip\\cli\\qip-move\r\nSubnet for 192.168.77.1  does not exist!\r\nNot found in database!\r\n"
+				}, {
+					"message" : "Moving V4 Object from 192.168.88.5 to 192.168.77.1 is failed.",
+					"messageDetail" : "Invalid fields [moveOption] when moving object from [192.168.88.2] to [192.168.99.0]."
+				}, {
+					"message" : "Moving V4 Object from 192.168.99.3 to 192.168.99.99 is failed.",
+					"messageDetail" : "Subnet Move CLI qip-move error [SERVERERROR] Error from Server: ORA-20000: 77: This IP address is used.\r\nORA-06512: at \"QIPADMIN.QSIDBERROR\", line 67\r\nORA-06512: at \"QIPADMIN.CREATEPLACEHOLDER\", line 69\r\nORA-06512: at line 1\r\n\r\n\r\nC:\\qip\\cli\\qip-move ERROR: move failed!\r\nC:\\qip\\cli\\qip-move\r\n192.168.99.3\r\nError code = -1\r\n"
+				}, {
+					"message" : "Moving V4 Object from 192.168.88.1 to 192.168.99.0 is failed.",
+					"messageDetail" : "Could not find IPv4 Address 192.168.088.001."
+				}, {
+					"message" : "Moving V4 Object from 192.168.88.5 to 192.168.88.12 is failed.",
+					"messageDetail" : "The scheduled time is not in a date format."
+				}, {
+					"message" : "Moving V4 Object from 192.168.88.5 to 192.168.88.12 is failed.",
+					"messageDetail" : "Subnet Move CLI qip-move error C:\\qip\\cli\\qip-move\r\ntime must be at least one hour from now\r\nInvalid parameter passed!\r\n"
+				}, {
+					"message" : "Moving V4 Object from 192.168.88.2 to 192.168.99.9 is failed.",
+					"messageDetail" : "Subnet Move CLI qip-move error C:\\qip\\cli\\qip-move\r\nDateTime must be in the future.\r\nInvalid parameter passed!\r\n"
+				}]
+			}
+		}
+	}
+}

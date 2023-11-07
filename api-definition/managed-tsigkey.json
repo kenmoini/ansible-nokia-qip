@@ -1,0 +1,158 @@
+{
+	"get": {
+		"get": {
+			"tags": [ "Managed TSIG Key" ],
+			"summary": "Get managed TSIG keys used to secure VitalQIP TSIG DNS updates",
+			"parameters": [{
+				"name": "Authentication",
+				"in": "header",
+				"description": "Token tokenValue<br>or<br>\nBasic username:password<br>or<br>\nLeave blank if using Client Certificate Authentication\n",
+				"required": false,
+				"type": "string"
+			},
+			{
+				"name": "Content-Type",
+				"in": "header",
+				"description": "application/xml<br>\napplication/json\n",
+				"required": true,
+				"type": "string",
+				"format": "string",
+				"enum": [
+					"application/json",
+					"application/xml"
+				]
+			},
+			{
+				"in": "path",
+				"name": "orgName",
+				"description": "Organization Name",
+				"required": true,
+				"type": "string"
+			},
+			{
+				"in": "path",
+				"name": "extension",
+				"description": ".json for a response in JSON format.<br> \n.xml for a response in XML format.\n",
+				"required": true,
+				"type": "string",
+				"enum": [
+					".json",
+					".xml"
+				]
+			}],
+			"responses": {
+				"200": {
+					"description": "Status 200",
+					"schema": {
+						"type": "array",
+						"items": {
+							"$ref": "#/definitions/ManagedTsigKeyEntity"
+						}
+					}
+				}
+			}
+		}
+	},
+	"change": {
+		"post": {
+			"summary": "Initiate a manual managed TSIG key rollover",
+			"tags": [ "Managed TSIG Key" ],
+			"parameters": [{
+				"name": "Authentication",
+				"in": "header",
+				"description": "Token tokenValue<br>or<br>\nBasic username:password<br>or<br>\nLeave blank if using Client Certificate Authentication\n",
+				"required": false,
+				"type": "string"
+			},
+			{
+				"in": "path",
+				"name": "orgName",
+				"description": "Organization Name",
+				"required": true,
+				"type": "string"
+			},
+			{
+				"name": "body",
+				"in": "body",
+				"required": true,
+				"schema": {
+					"$ref": "#/definitions/ManagedTsigKeyRolloverRequest"
+				}
+			}],
+			"responses": {
+				"200": {
+					"description": "OK",
+					"schema": {
+						"type": "string"
+					}
+				},
+				"400": {
+					"description": "Required Field(s) Missing: [keyAlgorithm]\n\nRequired Field(s) Missing: [keyLength]",
+					"schema": {
+						"type": "string"
+					}
+				}
+			}
+		}
+	},
+	"definitions": {
+		"ManagedTsigKeyEntity": {
+			"type": "object",
+			"properties": {
+				"key": {
+					"type": "string",
+					"description": "Name of the TSIG key."
+				},
+				"keyCreationDate": {
+					"type": "number",
+					"description": "The date (in Unix epoch milliseconds) when the key is created."
+				},
+				"keyState": {
+					"type": "string",
+					"description": "Active: This key is in use. Pending: This key needs to be published before use. Waiting: Waiting for qip-genddnsconfs to complete."
+				},
+				"server": {
+					"type": "string",
+					"description": "Name of the DNS server."
+				},
+				"publicationDate": {
+					"type": "number",
+					"description": "The date (in Unix epoch milliseconds) when the key is pushed successfully to the server."
+				},
+				"publicationRequired": {
+					"type": "boolean",
+					"description": "Is it necessary to publish a key to this server before the key can become Active."
+				}
+			},
+			"example": {
+				"key": "vitalqip-1-1",
+				"keyCreationDate": 1496647905567,
+				"keyState": "Active",
+				"server": "example.com",
+				"publicationDate": 1496721269305,
+				"publicationRequired": true
+			}
+		},
+		"ManagedTsigKeyRolloverRequest": {
+			"type": "object",
+			"required": [
+				"keyAlgorithm",
+				"keyLength"
+			],
+			"properties": {
+				"keyAlgorithm": {
+					"type": "string",
+					"description": "Algorithm for creating new managed TSIG key. It must be one of the following values: HMAC-MD5, HMAC-SHA1, HMAC-SHA224, HMAC-SHA256, HMAC-SHA384, HMAC-SHA512."
+				},
+				"keyLength": {
+					"type": "number",
+					"description": "Length for creating new managed TSIG key. It must adhere to the selected algorithm."
+				}
+			},
+			"example": {
+				"keyAlgorithm": "HMAC-MD5",
+				"keyLength": 512
+			}
+		}
+	}
+}

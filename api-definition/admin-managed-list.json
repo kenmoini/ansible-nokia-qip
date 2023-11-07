@@ -1,0 +1,218 @@
+{
+	"getManagedList" : {
+		"get" : {
+			"summary" : "Get the managed list of an administrator by login name and organization.",
+			"description" : "Get the managed list of an administrator by login name and organization.",
+			"operationId" : "getManagedList",
+			"tags" : ["Admin"],
+			"consumes" : ["application/json", "application/xml"],
+			"produces" : ["application/json", "application/xml"],
+			"parameters" : [{
+				"name" : "Authentication",
+				"in" : "header",
+				"description" : "Token tokenValue<br>or<br>\nBasic loginName:password<br>or<br>\nLeave blank if using Client Certificate Authentication\n",
+				"required" : false,
+				"type" : "string"
+			}, {
+				"in" : "path",
+				"name" : "orgName",
+				"description" : "Organization Name",
+				"required" : true,
+				"type" : "string"
+			}, {
+				"in" : "query",
+				"name" : "loginName",
+				"description" : "Login name of the administrator.",
+				"required" : true,
+				"type" : "string"
+			}, {
+				"in" : "query",
+				"name" : "assignedOrgName",
+				"description" : "The name of organization which you want to assign manage list on this organization.",
+				"required" : true,
+				"type" : "string"
+			}, {
+				"in" : "path",
+				"name" : "extension",
+				"description" : ".json for a response in JSON format.<br> \n.xml for a response in XML format.\n",
+				"required" : true,
+				"type" : "string",
+				"enum" : [".json", ".xml"]
+			}],
+			"responses" : {
+				"200" : {
+					"description" : "OK",
+					"schema" : {
+						"$ref" : "#/definitions/list"
+					}
+				},
+				"400" : {
+					"description" : "Required Field(s) Missing: [loginName].\n\nRequired Field(s) Missing: [assignedOrgName].",
+					"schema" : {
+						"type" : "string"
+					}
+				},
+				"403" : {
+					"description" : "Invalid permissions for the requested operation.",
+					"schema" : {
+						"type" : "string"
+					}
+				},
+				"404" : {
+					"description" : "Administrator &lt;loginName&gt; was not found.\n\nOrganization [assignedOrgName] was not found.",
+					"schema" : {
+						"type" : "string"
+					}
+				},
+				"500" : {
+					"description" : "Admin [loginName] is not a normal admin.\n\nOrganization [assignedOrgName] not assigned for Administrator [loginName] or this Administrator is a Normal - Organization Admin on the Organization.",
+					"schema" : {
+						"type" : "string"
+					}
+				}
+			}
+		}
+	},
+	"post" : {
+		"summary" : "Assign a manage list for an administrator.",
+		"description" : "Assign a manage list for an administrator.",
+		"operationId" : "assignManageList",
+		"tags" : ["Admin"],
+		"consumes" : ["application/json", "application/xml"],
+		"produces" : ["application/json", "application/xml"],
+		"parameters" : [{
+			"name" : "Authentication",
+			"in" : "header",
+			"description" : "Token tokenValue<br>or<br>\nBasic loginName:password<br>or<br>\nLeave blank if using Client Certificate Authentication\n",
+			"required" : false,
+			"type" : "string"
+		}, {
+			"in" : "path",
+			"name" : "orgName",
+			"description" : "Organization Name",
+			"required" : true,
+			"type" : "string"
+		}, {
+			"in" : "query",
+			"name" : "loginName",
+			"description" : "Login name of the administrator.",
+			"required" : true,
+			"type" : "string"
+		}, {
+			"in" : "query",
+			"name" : "assignedOrgName",
+			"description" : "The organization name which you want to assign manage list on this organization.",
+			"required" : true,
+			"type" : "string"
+		}, {
+			"name" : "requestBody",
+			"in" : "body",
+			"description" : "Request body",
+			"required" : true,
+			"schema" : {
+				"$ref" : "#/definitions/list"
+			}
+		}],
+		"responses" : {
+			"200" : {
+				"description" : "OK",
+				"schema" : {
+					"type" : "string"
+				}
+			},
+			"400" : {
+				"description" : "Required Field(s) Missing: [loginName].\n\nRequired Field(s) Missing: [assignedOrgName].",
+				"schema" : {
+					"type" : "string"
+				}
+			},
+			"403" : {
+				"description" : "Invalid permissions for the requested operation.",
+				"schema" : {
+					"type" : "string"
+				}
+			},
+			"403" : {
+				"description" : "Administrator &lt;loginName&gt; was not found.\n\nOrganization [assignedOrgName] was not found.\n\n",
+				"schema" : {
+					"type" : "string"
+				}
+			},
+			"500" : {
+				"description" : "Admin [loginName] is not a normal admin.\n\nInvalid item type [itemType].\n\nAn item name of item type [itemType] is missing.\n\nThe accessPermission of item [itemName] is missing.\n\nOrganization [assignedOrgName] not assigned for Administrator [loginName] or this Administrator is a Normal - Organization on Organization.\n\nItem with type [itemType] and identifier [itemName] is in the wrong organization: [assignedOrgName].\n\nNormal Administrator [loginName] did not create Administrator [loginName] and will not have modify/delete/clone permissions.",
+				"schema" : {
+					"type" : "string"
+				}
+			}
+		}
+	},
+	"definitions" : {
+		"list" : {
+			"type" : "object",
+			"properties" : {
+				"ManagedListRestModel" : {
+					"type" : "array",
+					"items" : {
+						"$ref" : "#/definitions/managedListRequest"
+					}	
+				}
+			},
+			"example" : {
+			    "list": [
+			        {
+			            "itemType": "Domain",
+			            "itemsList": [
+			                {
+			                    "itemName": "test.com",
+			                    "accessPermission": "Read"
+			                },
+			                {
+			                    "itemName": "abc",
+			                    "accessPermission": "Read"
+			                }
+			            ]
+			        },
+			        {
+			            "itemType": "Role",
+			            "itemsList": [
+			                {
+			                    "itemName": "Role1",
+			                    "accessPermission": "Read"
+			                }
+			            ]
+			        }
+			    ]
+			}
+		},
+		"managedListRequest" : {
+			"type" : "object",
+			"required" : ["itemType", "itemsList"],
+			"properties" : {
+				"itemType" : {
+					"type" : "string",
+					"description" : "Item type name"
+				},
+				"itemsList" : {
+					"type" : "array",
+					"items": {
+						"$ref": "#/definitions/Item"
+					}
+				}
+			}
+		},
+		"Item" : {
+			"type" : "object",
+			"required" : ["itemName", "accessPermission"],
+			"properties" : {
+				"itemName" : {
+					"type" : "string",
+					"description" : "Item name"
+				},
+				"accessPermission" : {
+					"type" : "string",
+					"description" : "Access permission"
+				}
+			}
+		}
+	}
+}

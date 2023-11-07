@@ -1,0 +1,1895 @@
+{
+	"post": {
+		"summary" : "Create an administrator account.",
+		"description": "Create an administrator account.",
+		"operationId" : "createAdmin",
+		"tags" : ["Admin"],
+		"consumes" : ["application/json", "application/xml"],
+		"produces" : ["application/json", "application/xml"],
+		"parameters" : [{
+			"name" : "Authentication",
+			"in" : "header",
+			"description" : "Token tokenValue<br>or<br>\nBasic loginName:password<br>or<br>\nLeave blank if using Client Certificate Authentication\n",
+			"required" : false,
+			"type" : "string"
+		}, {
+			"in" : "path",
+			"name" : "orgName",
+			"description" : "Organization Name",
+			"required" : true,
+			"type" : "string"
+		}, {
+			"name" : "requestBody",
+			"in" : "body",
+			"description" : "Request body",
+			"required" : true,
+			"schema" : {
+				"$ref" : "#/definitions/AdminRestModel"
+			}
+		}],
+		"responses" : {
+			"201" : {
+				"description" : "Created"
+			},
+			"400" : {
+				"description" : "Required Field(s) Missing: [fieldName]\n\nInvalid value of field(s): [fieldName]"
+			},
+			"403" : {
+				"description" : "Invalid permissions for the requested operation.\n\nNormal Administrator cannot create, modify or delete master Administrator.\n\nNormal - Normal Administrator only has write access permission on organization [orgName].\n\nOrganization Administrator [loginName] has Read Privileges to Organization [orgName] and cannot assign Write Privileges to Organization [orgName]"
+			},
+			"404" : {
+				"description" : "Organization &lt;orgName&gt; was not found.\n\nThe contact was not found.\n\nThe location was not found."
+			},
+			"500" : {
+				"description" : "Administrator &lt;loginName&gt; already exists.\n\nError when assigning organization with name [orgName] for administrator [loginName]."
+			}
+		}
+	},
+	"getAdmin" : {
+		"get" : {
+			"summary" : "Get an administrator account.",
+			"description" : "Get an administrator account.",
+			"operationId" : "getAdmin",
+			"tags" : ["Admin"],
+			"consumes" : ["application/json", "application/xml"],
+			"produces" : ["application/json", "application/xml"],
+			"parameters" : [{
+				"name" : "Authentication",
+				"in" : "header",
+				"description" : "Token tokenValue<br>or<br>\nBasic loginName:password<br>or<br>\nLeave blank if using Client Certificate Authentication\n",
+				"required" : false,
+				"type" : "string"
+			}, {
+				"in" : "path",
+				"name" : "orgName",
+				"description" : "Organization Name",
+				"required" : true,
+				"type" : "string"
+			}, {
+				"in" : "path",
+				"name" : "loginName",
+				"description" : "Login Name",
+				"required" : true,
+				"type" : "string"
+			}, {
+				"in" : "path",
+				"name" : "extension",
+				"description" : ".json for a response in JSON format.<br> \n.xml for a response in XML format.\n",
+				"required" : true,
+				"type" : "string",
+				"enum" : [".json", ".xml"]
+			}],
+			"responses" : {
+				"200" : {
+					"description" : "OK",
+					"schema" : {
+						"$ref" : "#/definitions/Admin"
+					}
+				},
+				"400" : {
+					"description" : "Required Field(s) Missing: [loginName]",
+					"schema" : {
+						"type" : "string"
+					}
+				},
+				"404" : {
+					"description" : "Administrator &lt;loginName&gt; was not found.\n",
+					"schema" : {
+						"type" : "string"
+					}
+				}
+			}
+		}
+	},
+	"put" : {
+		"summary" : "Modify an administrator account.",
+		"description": "Modify an administrator account. <br>\n*Note:* Administrator loginName must exist; it cannot be modified via REST. Password can only be modified using admin/changePassword REST API. The adminType cannot be modified via REST API.",
+		"operationId" : "modifyAdmin",
+		"tags" : ["Admin"],
+		"consumes" : ["application/json", "application/xml"],
+		"parameters" : [{
+			"name" : "Authentication",
+			"in" : "header",
+			"description" : "Token tokenValue<br>or<br>\nBasic loginName:password<br>or<br>\nLeave blank if using Client Certificate Authentication\n",
+			"required" : false,
+			"type" : "string"
+		}, {
+			"in" : "path",
+			"name" : "orgName",
+			"description" : "Organization Name",
+			"required" : true,
+			"type" : "string"
+		}, {
+			"in" : "query",
+			"name" : "loginName",
+			"description" : "Login Name",
+			"required" : true,
+			"type" : "string"
+		}, {
+			"name" : "requestBody",
+			"in" : "body",
+			"description" : "Request body",
+			"required" : true,
+			"schema" : {
+				"$ref" : "#/definitions/modify/AdminRestModel"
+			}
+		}],
+		"responses" : {
+			"200" : {
+				"description" : "OK"
+			},
+			"400" : {
+				"description" : "Required Field(s) Missing: [fieldName]\n\nInvalid value of field(s): [fieldName]"
+			},
+			"403" : {
+				"description" : "Invalid permissions for the requested operation.\n\nNormal Administrator cannot create, modify or delete master Administrator.\n\nNormal Administrator &lt;loginName&gt; did not create Administrator &lt;loginName&gt; and will not have modify/delete/clone permissions.\n\nNormal - Normal Administrator only has write access permission on organization [orgName]."
+			},
+			"404" : {
+				"description" : "Administrator &lt;loginName&gt; was not found.\n\nOrganization &lt;orgName&gt; was not found.\n\nThe contact was not found.\n\nThe location was not found."
+			},
+			"500" : {
+				"description" : "Error when assigning organization with name [orgName] for administrator [loginName]."
+			}
+		}
+	},
+	"changePassword" : {
+		"put" : {
+			"summary" : "Change password for an administrator account.",
+			"description": "Change password for an administrator account.",
+			"operationId" : "changePassword",
+			"tags" : ["Admin"],
+			"consumes" : ["application/json", "application/xml"],
+			"parameters" : [{
+				"name" : "Authentication",
+				"in" : "header",
+				"description" : "Token tokenValue<br>or<br>\nBasic loginName:password<br>or<br>\nLeave blank if using Client Certificate Authentication\n",
+				"required" : false,
+				"type" : "string"
+			}, {
+				"in" : "path",
+				"name" : "orgName",
+				"description" : "Organization Name",
+				"required" : true,
+				"type" : "string"
+			}, {
+				"in" : "query",
+				"name" : "loginName",
+				"description" : "Login Name",
+				"required" : true,
+				"type" : "string"
+			}, {
+				"in" : "query",
+				"name" : "newPassword",
+				"description" : "New password",
+				"required" : true,
+				"type" : "string",
+				"format" : "password"
+			}, {
+				"in" : "query",
+				"name" : "confirmNewPassword",
+				"description" : "Confirm new password",
+				"required" : true,
+				"type" : "string",
+				"format" : "password"
+			}],
+			"responses" : {
+				"200" : {
+					"description" : "OK",
+					"schema" : {
+						"type" : "string"
+					}
+				},
+				"404" : {
+					"description" : "Administrator &lt;loginName&gt; was not found.\n\n",
+					"schema" : {
+						"type" : "string"
+					}
+				},
+				"500" : {
+					"description" : "Normal Administrator &lt;loginName&gt; cannot create, modify or delete Master Administrator &lt;loginName&gt;.\n\nNormal Administrator &lt;loginName&gt; did not create Administrator &lt;loginName&gt; and will not have modify/delete/clone permissions.\n\nThe new password does not match the confirm password.\n\nThe authentication type of admin [loginName] is not password type.",
+					"schema" : {
+						"type" : "string"
+					}
+				}
+			}
+		}
+	},
+	"delete" : {
+		"summary" : "Delete an administrator account.",
+		"description": "Delete an administrator account.",
+		"operationId" : "deleteAdmin",
+		"tags" : ["Admin"],
+		"parameters" : [{
+			"name" : "Authentication",
+			"in" : "header",
+			"description" : "Token tokenValue<br>or<br>\nBasic loginName:password<br>or<br>\nLeave blank if using Client Certificate Authentication\n",
+			"required" : false,
+			"type" : "string"
+		}, {
+			"in" : "path",
+			"name" : "orgName",
+			"description" : "Organization Name",
+			"required" : true,
+			"type" : "string"
+		}, {
+			"in" : "query",
+			"name" : "loginName",
+			"description" : "Login Name",
+			"required" : true,
+			"type" : "string"
+		}],
+		"responses" : {
+			"200" : {
+				"description" : "OK",
+				"schema" : {
+					"type" : "string"
+				}
+			},
+			"403" : {
+				"description" : "Invalid permissions for the requested operation.",
+				"schema" : {
+					"type" : "string"
+				}
+			},
+			"404" : {
+				"description" : "Administrator &lt;loginName&gt; was not found.\n\n",
+				"schema" : {
+					"type" : "string"
+				}
+			},
+			"500" : {
+				"description" : "Normal Administrator &lt;loginName&gt; did not create Administrator &lt;loginName&gt; and will not have modify/delete/clone permissions.\n\nNormal Administrator [loginName] cannot create, modify or delete Master Administrator [loginName].",
+				"schema" : {
+					"type" : "string"
+				}
+			}
+		}
+	},
+	"searchAdmin" : {
+		"get" : {
+			"summary" : "Search administrator.",
+			"description" : "Search administrator by login name, admin type or admin status. It just return basic information of admin such as loginName, adminType, authenticationType and assignedOrganizations if it's Normal Administrator.",
+			"operationId" : "searchAdmin",
+			"tags" : ["Admin"],
+			"consumes" : ["application/json", "application/xml"],
+			"produces" : ["application/json", "application/xml"],
+			"parameters" : [{
+				"name" : "Authentication",
+				"in" : "header",
+				"description" : "Token tokenValue<br>or<br>\nBasic loginName:password<br>or<br>\nLeave blank if using Client Certificate Authentication\n",
+				"required" : false,
+				"type" : "string"
+			}, {
+				"in" : "path",
+				"name" : "orgName",
+				"description" : "Organization Name",
+				"required" : true,
+				"type" : "string"
+			}, {
+				"in" : "path",
+				"name" : "extension",
+				"description" : ".json for a response in JSON format.<br> \n.xml for a response in XML format.\n",
+				"required" : true,
+				"type" : "string",
+				"enum" : [".json", ".xml"]
+			}, {
+				"in" : "query",
+				"name" : "loginName",
+				"description" : "Login name of the administrator for which you are searching.\nYou can use an asterisk (*) as a wildcard character to \nreturn a range of results.",
+				"required" : false,
+				"type" : "string"
+			}, {
+				"in" : "query",
+				"name" : "adminType",
+				"description" : "Administrator type",
+				"default" :	"All",
+				"required" : false,
+				"type" : "string",
+				"enum" : [
+						"Normal",
+						"Master"
+				]
+			}, {
+				"in" : "query",
+				"name" : "adminStatus",
+				"description" : "Administrator status",
+				"default" :	"All",
+				"required" : false,
+				"type" : "string",
+				"enum" : [
+						"Enabled",
+						"Disabled"
+				]
+			}, {
+				"in" : "query",
+				"name" : "pageIndex",
+				"description" : "Page index. Default value is 1.",
+				"required" : false,
+				"type" : "integer"
+			}, {
+				"in" : "query",
+				"name" : "pageSize",
+				"description" : "Page size. Default value is 25.",
+				"required" : false,
+				"type" : "integer"
+			}],
+			"responses" : {
+				"200" : {
+					"description" : "OK",
+					"schema" : {
+						"$ref" : "#/definitions/SearchAdmin"
+					}
+				},
+				"406" : {
+					"description" : "Paginated list indexes start at 1\n",
+					"schema" : {
+						"type" : "string"
+					}
+				}
+			}
+		}
+	},
+	"report" : {
+		"get" : {
+			"description": "Use this URL to download Administrators report file.\n\nWhen using <b>cURL</b> with this API specify \"-o fileName.extension\" to download file contents.\n\nInternet Explorer browser users: to download the report please right click the <b>“Download file”</b> link and select <b>“Save as”</b> then input the desired file name with the correct extension.\n\nExample: <b>qipman-AdministratorsReport-20190328_103238_523_0700.html</b> or <b>qipman-AdministratorsReport-20190328_103238_523_0700.pdf</b>",
+			"operationId": "report",
+			"summary": "Download Administrators report file",
+			"tags" : ["Admin"],
+			"consumes": [
+				"multipart/form-data",
+				"application/x-www-form-urlencoded"
+			],
+			"parameters": [
+				{
+					"$ref": "utils.json#/definitions/Authentication"
+				},
+				{
+					"name": "Content-Type",
+					"in": "header",
+					"required": true,
+					"type": "string",
+					"enum": [
+						"application/json",
+						"application/xml"
+					]
+				},
+				{
+					"$ref": "utils.json#/definitions/Organization"
+				}, {
+					"in" : "query",
+					"name" : "adminNames",
+					"description" : "Administrator Names (Empty this field to report for all administrators). To add multiple administrators, enter a comma separated list",
+					"required" : false,
+					"type" : "string"
+				}, {
+					"in" : "query",
+					"name" : "adminStatus",
+					"description" : "Administrator Status",
+					"required" : true,
+					"type" : "string",
+					"enum": [
+						"All",
+						"Enabled",
+						"Disabled"
+					]
+				}, {
+					"in" : "query",
+					"name" : "reportFormat",
+					"description" : "Report Format",
+					"required" : true,
+					"type" : "string",
+					"enum": [
+						"html",
+						"pdf"
+					]
+				}
+			],
+			"responses": {
+				"200": {
+					"description": "OK",
+					"type":"file",
+					"headers": {
+						"Content-Type": {
+							"type": "string"
+						}
+					}
+				},
+				"403" : {
+					"description" : "Invalid permissions for the requested operation.",
+					"schema" : {
+						"type" : "string"
+					}
+				}
+			}
+		}
+	},
+	"definitions" : {
+		"Admin" : {
+			"type" : "object",
+			"required" : ["loginName", "adminType", "authenticationType",
+					"globalPrivileges"],
+			"properties" : {
+				"loginName" : {
+					"type" : "string",
+					"description" : "Login name"
+				},
+				"adminType" : {
+					"type" : "string",
+					"description" : "Administrator Type: Master or Normal"
+				},
+				"authenticationType" : {
+					"type" : "string",
+					"description" : "Authentication Type. One of following values: \n\n'Password',</br>'Certificate',</br>'SAML Managed',</br>'SAML Authenticated'"
+				},
+				"adminStatus" : {
+					"type" : "string",
+					"description" : "Admin Status. One of following values: \n\n'Disabled',</br>'Enabled'"
+				},
+				"contact" : {
+					"type" : "object",
+					"description" : "Person Profile",
+					"properties" : {
+						"lastName" : {
+							"type" : "string",
+							"description" : "Last Name"
+						},
+						"firstName" : {
+							"type" : "string",
+							"description" : "First Name"
+						},
+						"email" : {
+							"type" : "string",
+							"description" : "Email"
+						},
+						"phone" : {
+							"type" : "string",
+							"description" : "Phone Number"
+						},
+						"mobile" : {
+							"type" : "string",
+							"description" : "Mobile Number"
+						}
+					}
+				},
+				"location" : {
+					"type" : "object",
+					"description" : "Location",
+					"properties" : {
+						"street1" : {
+							"type" : "string",
+							"description" : "Street1"
+						},
+						"street2" : {
+							"type" : "string",
+							"description" : "Street2"
+						},
+						"city" : {
+							"type" : "string",
+							"description" : "City"
+						},
+						"state" : {
+							"type" : "string",
+							"description" : "State"
+						},
+						"zip" : {
+							"type" : "string",
+							"description" : "Zip"
+						},
+						"country" : {
+							"type" : "string",
+							"description" : "Country"
+						}
+					}
+				},
+				"businessUnitID" : {
+					"type" : "string",
+					"description" : "Business Unit ID"
+				},
+				"defaultPrinter" : {
+					"type" : "string",
+					"description" : "Default Printer ID"
+				},
+				"assignedOrganizations" : {
+					"type" : "array",
+					"description" : "The Organizations to be assigned with Normal Administrator",
+					"items" : {
+						"$ref" : "#/definitions/AssignedOrganizationData"
+					}
+				},
+				"globalPrivileges" : {
+					"type" : "array",
+					"description" : "The Global Privileges to be created with Administrator",
+					"items" : {
+						"$ref" : "#/definitions/PrivilegeData"
+					}
+				},
+				"organizationPrivilegesDefault" : {
+					"type" : "array",
+					"description" : "The Default Organization Privileges to be created with Normal Administrator",
+					"items" : {
+						"$ref" : "#/definitions/PrivilegeData"
+					}
+				}
+			},
+			"example": {
+			  "loginName":"qipman",
+			  "adminType":"qipman",
+			  "authenticationType":"Password",
+			  "adminStatus":"Enabled",
+			  "contact":{
+			    "lastName":"qipman",
+			    "firstName":"qipman",
+			    "email":"abc@abc.com",
+			    "phone":"0123456789",
+			    "mobile":"0987654321"
+			  },
+			  "location":{
+			    "street1":"abc",
+			    "street2":"abc",
+			    "city":"abc",
+			    "state":"abc",
+			    "zip":"123456",
+			    "country":"abc"
+			  },
+			  "businessUnitID":"123456",
+			  "defaultPrinter":"abc",
+			  "assignedOrganizations":[
+			    {
+			      "orgName":"OrgTest1",
+			      "managedType":"Normal",
+			      "accessPermission":"Write",
+			      "useDefaultOrgPrivileges":"False",
+			      "organizationPrivileges":[
+			        {
+			          "privilegeName":"Access DNS Group",
+			          "value":"False"
+			        },
+			        {
+			          "privilegeName":"Access Infrastructure Import",
+			          "value":"False"
+			        },
+			        {
+			          "privilegeName":"Access Node Management",
+			          "value":"False"
+			        },
+			        {
+			          "privilegeName":"Access V6 Address Management",
+			          "value":"False"
+			        },
+			        {
+			          "privilegeName":"Access VisualIP Space Only",
+			          "value":"False"
+			        },
+			        {
+			          "privilegeName":"Allow Dynamic MDHCP Update Without DHCP Server Permission",
+			          "value":"True"
+			        },
+			        {
+			          "privilegeName":"Appliance Admin",
+			          "value":"False"
+			        },
+			        {
+			          "privilegeName":"Highest Level GUI Mode",
+			          "value":"Basic Mode"
+			        },
+			        {
+			          "privilegeName":"Access Address Allocation",
+			          "value":"False"
+			        },
+			        {
+			          "privilegeName":"Allow User Selection",
+			          "value":"False"
+			        },
+			        {
+			          "privilegeName":"Display MyView Tab Only",
+			          "value":"False"
+			        },
+			        {
+			          "privilegeName":"Require Alias",
+			          "value":"False"
+			        },
+			        {
+			          "privilegeName":"Require Contact Name",
+			          "value":"False"
+			        },
+			        {
+			          "privilegeName":"Require Location",
+			          "value":"False"
+			        },
+			        {
+			          "privilegeName":"Require MAC Address",
+			          "value":"False"
+			        },
+			        {
+			          "privilegeName":"Restrict CNAME",
+			          "value":"False"
+			        },
+			        {
+			          "privilegeName":"Restrict Subnet",
+			          "value":"False"
+			        },
+			        {
+			          "privilegeName":"Unique Name Warning",
+			          "value":"True"
+			        }
+			      ]
+			    },
+			    {
+			      "orgName":"VitalQIP Organization",
+			      "managedType":"Organization",
+			      "accessPermission":"Read",
+			      "useDefaultOrgPrivileges":"True"
+			    }
+			  ],
+			  "globalPrivileges":[
+			    {
+			      "privilegeName":"Allow Recursive Deletes",
+			      "value":"Temporary",
+			      "subPrivileges":[
+			        {
+			          "privilegeName":"Expiration",
+			          "value":"03/13/2020 12:00"
+			        }
+			      ]
+			    },
+			    {
+			      "privilegeName":"Default Object Class",
+			      "value":"3G Phone"
+			    },
+			    {
+			      "privilegeName":"Allow AC Management",
+			      "value":"False"
+			    },
+			    {
+			      "privilegeName":"Allow Password Expiration",
+			      "value":"True"
+			    },
+			    {
+			      "privilegeName":"Create/Update Administrator",
+			      "value":"False"
+			    },
+			    {
+			      "privilegeName":"IPv4 subnet default view style",
+			      "value":"Table"
+			    },
+			    {
+			      "privilegeName":"Zone default view style",
+			      "value":"Table"
+			    },
+			    {
+			      "privilegeName":"IPv4 network default view style",
+			      "value":"Table"
+			    }
+			  ],
+			  "organizationPrivilegesDefault":[
+			    {
+			      "privilegeName":"Access DNS Group",
+			      "value":"True",
+			      "subPrivileges":[
+			        {
+			          "privilegeName":"Manage DNS Group",
+			          "value":"True"
+			        },
+			        {
+			          "privilegeName":"Generate DNS Group",
+			          "value":"True"
+			        }
+			      ]
+			    },
+			    {
+			      "privilegeName":"Access Infrastructure Import",
+			      "value":"True",
+			      "subPrivileges":[
+			        {
+			          "privilegeName":"Import IPv4 Networks",
+			          "value":"False"
+			        },
+			        {
+			          "privilegeName":"Import IPv4 Subnets",
+			          "value":"False"
+			        },
+			        {
+			          "privilegeName":"Import IPv4 Objects",
+			          "value":"False"
+			        },
+			        {
+			          "privilegeName":"Import IPv6 Pools",
+			          "value":"False"
+			        },
+			        {
+			          "privilegeName":"Import IPv6 Blocks",
+			          "value":"False"
+			        },
+			        {
+			          "privilegeName":"Import IPv6 Subnets",
+			          "value":"False"
+			        },
+			        {
+			          "privilegeName":"Import IPv6 Ranges",
+			          "value":"False"
+			        },
+			        {
+			          "privilegeName":"Import IPv6 Addresses",
+			          "value":"False"
+			        },
+			        {
+			          "privilegeName":"Import DNS Domains",
+			          "value":"False"
+			        },
+			        {
+			          "privilegeName":"Import DNS Records",
+			          "value":"False"
+			        },
+			        {
+			          "privilegeName":"Import Subnet Organizations",
+			          "value":"False"
+			        },
+			        {
+			          "privilegeName":"Import Nodes",
+			          "value":"False"
+			        },
+			        {
+			          "privilegeName":"Import MAC Pools",
+			          "value":"False"
+			        }
+			      ]
+			    },
+			    {
+			      "privilegeName":"Access Address Allocation",
+			      "value":"True",
+			      "subPrivileges":[
+			        {
+			          "privilegeName":"Maintain Blocks",
+			          "value":"True",
+			          "subPrivileges":[
+			            {
+			              "privilegeName":"Expand Blocks",
+			              "value":"False"
+			            },
+			            {
+			              "privilegeName":"Renumber Blocks",
+			              "value":"False"
+			            },
+			            {
+			              "privilegeName":"Split/Merge Blocks",
+			              "value":"False"
+			            },
+			            {
+			              "privilegeName":"Allocate Blocks",
+			              "value":"True",
+			              "subPrivileges":[
+			                {
+			                  "privilegeName":"Rule Level",
+			                  "value":"Normal"
+			                }
+			              ]
+			            },
+			            {
+			              "privilegeName":"Explicitly Create Blocks",
+			              "value":"False"
+			            },
+			            {
+			              "privilegeName":"Free Blocks",
+			              "value":"False"
+			            },
+			            {
+			              "privilegeName":"Move Blocks",
+			              "value":"False"
+			            }
+			          ]
+			        },
+			        {
+			          "privilegeName":"Maintain Pools",
+			          "value":"False"
+			        },
+			        {
+			          "privilegeName":"Maintain Seed Pool",
+			          "value":"False"
+			        },
+			        {
+			          "privilegeName":"Rule Override",
+			          "value":"False"
+			        },
+			        {
+			          "privilegeName":"Write New Infrastructure to Managed List",
+			          "value":"True"
+			        }
+			      ]
+			    },
+			    {
+			      "privilegeName":"Access Node Management",
+			      "value":"False"
+			    },
+			    {
+			      "privilegeName":"Access V6 Address Management",
+			      "value":"False"
+			    },
+			    {
+			      "privilegeName":"Access VisualIP Space Only",
+			      "value":"False"
+			    },
+			    {
+			      "privilegeName":"Allow Dynamic MDHCP Update Without DHCP Server Permission",
+			      "value":"True"
+			    },
+			    {
+			      "privilegeName":"Appliance Admin",
+			      "value":"False"
+			    },
+			    {
+			      "privilegeName":"Highest Level GUI Mode",
+			      "value":"Advanced Mode",
+			      "subPrivileges":[
+			        {
+			          "privilegeName":"Create Infrastructure",
+			          "value":"True",
+			          "subPrivileges":[
+			            {
+			              "privilegeName":"Dynamic Domain Creation",
+			              "value":"False"
+			            }
+			          ]
+			        },
+			        {
+			          "privilegeName":"Create Resource Records",
+			          "value":"False"
+			        }
+			      ]
+			    },
+			    {
+			      "privilegeName":"Allow User Selection",
+			      "value":"False"
+			    },
+			    {
+			      "privilegeName":"Display MyView Tab Only",
+			      "value":"False"
+			    },
+			    {
+			      "privilegeName":"Require Alias",
+			      "value":"False"
+			    },
+			    {
+			      "privilegeName":"Require Contact Name",
+			      "value":"False"
+			    },
+			    {
+			      "privilegeName":"Require Location",
+			      "value":"False"
+			    },
+			    {
+			      "privilegeName":"Require MAC Address",
+			      "value":"False"
+			    },
+			    {
+			      "privilegeName":"Restrict CNAME",
+			      "value":"False"
+			    },
+			    {
+			      "privilegeName":"Restrict Subnet",
+			      "value":"False"
+			    },
+			    {
+			      "privilegeName":"Unique Name Warning",
+			      "value":"True"
+			    }
+			  ]
+			}
+		},
+		"AssignedOrganizationData":{
+		  "type":"object",
+		  "properties":{
+		    "orgName":{
+		      "type":"string",
+		      "description":"Organization Name"
+		    },
+		    "managedType":{
+		      "type":"string",
+		      "description":"Managed Type"
+		    },
+		    "accessPermission":{
+		      "type":"string",
+		      "description":"Access Permisstion"
+		    },
+		    "useDefaultOrgPrivileges":{
+		      "type":"string",
+		      "description":"Use default organization privileges."
+		    },
+		    "organizationPrivileges":{
+		      "type":"array",
+		      "description":"The Organization Privileges",
+		      "items":{
+		        "$ref":"#/definitions/PrivilegeData"
+		      }
+		    }
+		  }
+		},
+		"PrivilegeData" : {
+			"type" : "object",
+			"properties" : {
+				"privilegeName" : {
+					"type" : "string",
+					"description" : "Privilege Name"
+				},
+				"value" : {
+					"type" : "string",
+					"description" : "Privilege Value"
+				}
+			}
+		},
+		"AdminRestModel" : {
+			"type" : "object",
+			"description" : "Admin model",
+			"required" : ["loginName", "password", "adminType",
+					"authenticationType", "globalPrivileges"],
+			"properties" : {
+				"loginName" : {
+					"type" : "string",
+					"description" : "Login name"
+				},
+				"password" : {
+					"type" : "string",
+					"description" : "Password"
+				},
+				"adminType" : {
+					"type" : "string",
+					"description" : "Administrator Type: Master or Normal"
+				},
+				"authenticationType" : {
+					"type" : "string",
+					"description" : "Authentication Type. One of following values: \n\n'Password',</br>'Certificate',</br>'SAML Managed',</br>'SAML Authenticated'"
+				},
+				"contact" : {
+					"type" : "object",
+					"description" : "Person Profile",
+					"properties" : {
+						"lastName" : {
+							"type" : "string",
+							"description" : "Last Name"
+						},
+						"firstName" : {
+							"type" : "string",
+							"description" : "First Name"
+						}
+					}
+				},
+				"location" : {
+					"type" : "object",
+					"description" : "Location",
+					"properties" : {
+						"street1" : {
+							"type" : "string",
+							"description" : "Street1"
+						},
+						"street2" : {
+							"type" : "string",
+							"description" : "Street2"
+						},
+						"city" : {
+							"type" : "string",
+							"description" : "City"
+						},
+						"state" : {
+							"type" : "string",
+							"description" : "State"
+						},
+						"zip" : {
+							"type" : "string",
+							"description" : "Zip"
+						},
+						"country" : {
+							"type" : "string",
+							"description" : "Country"
+						}
+					}
+				},
+				"businessUnitID" : {
+					"type" : "string",
+					"description" : "Business Unit ID"
+				},
+				"defaultPrinter" : {
+					"type" : "string",
+					"description" : "Default Printer ID"
+				},
+				"assignedOrganizations" : {
+					"type" : "array",
+					"description" : "The Organizations to be assigned with Normal Administrator",
+					"items" : {
+						"$ref" : "#/definitions/AssignedOrganizationData"
+					}
+				},
+				"globalPrivileges" : {
+					"type" : "array",
+					"description" : "The Global Privileges to be created with Administrator",
+					"items" : {
+						"$ref" : "#/definitions/PrivilegeData"
+					}
+				},
+				"organizationPrivilegesDefault" : {
+					"type" : "array",
+					"description" : "The Organization Privileges to be created with Normal Administrator",
+					"items" : {
+						"$ref" : "#/definitions/PrivilegeData"
+					}
+				}
+			},
+			"example" : {
+				"loginName" : "Example",
+				"password" : "123456",
+				"adminType" : "Master",
+				"authenticationType" : "Password",
+				"contact" : {
+					"lastName" : "qipman",
+					"firstName" : "qipman"
+				},
+				"location" : {
+					"street1" : "abc",
+					"street2" : "abc",
+					"city" : "abc",
+					"state" : "abc",
+					"zip" : "123456",
+					"country" : "abc"
+				},
+				"businessUnitID" : "123456",
+				"defaultPrinter" : "abc",
+				"assignedOrganizations":[
+				    {
+				      "orgName":"OrgTest1",
+				      "managedType":"Normal",
+				      "accessPermission":"Write",
+				      "useDefaultOrgPrivileges":"False",
+				      "organizationPrivileges":[
+				        {
+				          "privilegeName":"Access DNS Group",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Access Infrastructure Import",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Access Node Management",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Access V6 Address Management",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Access VisualIP Space Only",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Allow Dynamic MDHCP Update Without DHCP Server Permission",
+				          "value":"True"
+				        },
+				        {
+				          "privilegeName":"Appliance Admin",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Highest Level GUI Mode",
+				          "value":"Basic Mode"
+				        },
+				        {
+				          "privilegeName":"Access Address Allocation",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Allow User Selection",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Display MyView Tab Only",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Require Alias",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Require Contact Name",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Require Location",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Require MAC Address",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Restrict CNAME",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Restrict Subnet",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Unique Name Warning",
+				          "value":"True"
+				        }
+				      ]
+				    },
+				    {
+				      "orgName":"VitalQIP Organization",
+				      "managedType":"Organization",
+				      "accessPermission":"Read",
+				      "useDefaultOrgPrivileges":"True"
+			    	}
+				],
+				"globalPrivileges":[
+					  {
+					    "privilegeName":"Allow Recursive Deletes",
+					    "value":"Temporary",
+					    "subPrivileges":[
+					      {
+					        "privilegeName":"Expiration",
+					        "value":"03/13/2020 12:00"
+					      }
+					    ]
+					  },
+					  {
+					    "privilegeName":"Default Object Class",
+					    "value":"3G Phone"
+					  },
+					  {
+					    "privilegeName":"Allow AC Management",
+					    "value":"False"
+					  },
+					  {
+					    "privilegeName":"Allow Password Expiration",
+					    "value":"True"
+					  },
+					  {
+					    "privilegeName":"Create/Update Administrator",
+					    "value":"False"
+					  },
+					  {
+					    "privilegeName":"IPv4 subnet default view style",
+					    "value":"Table"
+					  },
+					  {
+					    "privilegeName":"Zone default view style",
+					    "value":"Table"
+					  },
+					  {
+					    "privilegeName":"IPv4 network default view style",
+					    "value":"Table"
+					  }
+				],
+				"organizationPrivilegesDefault":[
+				    {
+				      "privilegeName":"Access DNS Group",
+				      "value":"True",
+				      "subPrivileges":[
+				        {
+				          "privilegeName":"Manage DNS Group",
+				          "value":"True"
+				        },
+				        {
+				          "privilegeName":"Generate DNS Group",
+				          "value":"True"
+				        }
+				      ]
+				    },
+				    {
+				      "privilegeName":"Access Infrastructure Import",
+				      "value":"True",
+				      "subPrivileges":[
+				        {
+				          "privilegeName":"Import IPv4 Networks",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Import IPv4 Subnets",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Import IPv4 Objects",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Import IPv6 Pools",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Import IPv6 Blocks",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Import IPv6 Subnets",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Import IPv6 Ranges",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Import IPv6 Addresses",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Import DNS Domains",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Import DNS Records",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Import Subnet Organizations",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Import Nodes",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Import MAC Pools",
+				          "value":"False"
+				        }
+				      ]
+				    },
+				    {
+				      "privilegeName":"Access Address Allocation",
+				      "value":"True",
+				      "subPrivileges":[
+				        {
+				          "privilegeName":"Maintain Blocks",
+				          "value":"True",
+				          "subPrivileges":[
+				            {
+				              "privilegeName":"Expand Blocks",
+				              "value":"False"
+				            },
+				            {
+				              "privilegeName":"Renumber Blocks",
+				              "value":"False"
+				            },
+				            {
+				              "privilegeName":"Split/Merge Blocks",
+				              "value":"False"
+				            },
+				            {
+				              "privilegeName":"Allocate Blocks",
+				              "value":"True",
+				              "subPrivileges":[
+				                {
+				                  "privilegeName":"Rule Level",
+				                  "value":"Normal"
+				                }
+				              ]
+				            },
+				            {
+				              "privilegeName":"Explicitly Create Blocks",
+				              "value":"False"
+				            },
+				            {
+				              "privilegeName":"Free Blocks",
+				              "value":"False"
+				            },
+				            {
+				              "privilegeName":"Move Blocks",
+				              "value":"False"
+				            }
+				          ]
+				        },
+				        {
+				          "privilegeName":"Maintain Pools",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Maintain Seed Pool",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Rule Override",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Write New Infrastructure to Managed List",
+				          "value":"True"
+				        }
+				      ]
+				    },
+				    {
+				      "privilegeName":"Access Node Management",
+				      "value":"False"
+				    },
+				    {
+				      "privilegeName":"Access V6 Address Management",
+				      "value":"False"
+				    },
+				    {
+				      "privilegeName":"Access VisualIP Space Only",
+				      "value":"False"
+				    },
+				    {
+				      "privilegeName":"Allow Dynamic MDHCP Update Without DHCP Server Permission",
+				      "value":"True"
+				    },
+				    {
+				      "privilegeName":"Appliance Admin",
+				      "value":"False"
+				    },
+				    {
+				      "privilegeName":"Highest Level GUI Mode",
+				      "value":"Advanced Mode",
+				      "subPrivileges":[
+				        {
+				          "privilegeName":"Create Infrastructure",
+				          "value":"True",
+				          "subPrivileges":[
+				            {
+				              "privilegeName":"Dynamic Domain Creation",
+				              "value":"False"
+				            }
+				          ]
+				        },
+				        {
+				          "privilegeName":"Create Resource Records",
+				          "value":"False"
+				        }
+				      ]
+				    },
+				    {
+				      "privilegeName":"Allow User Selection",
+				      "value":"False"
+				    },
+				    {
+				      "privilegeName":"Display MyView Tab Only",
+				      "value":"False"
+				    },
+				    {
+				      "privilegeName":"Require Alias",
+				      "value":"False"
+				    },
+				    {
+				      "privilegeName":"Require Contact Name",
+				      "value":"False"
+				    },
+				    {
+				      "privilegeName":"Require Location",
+				      "value":"False"
+				    },
+				    {
+				      "privilegeName":"Require MAC Address",
+				      "value":"False"
+				    },
+				    {
+				      "privilegeName":"Restrict CNAME",
+				      "value":"False"
+				    },
+				    {
+				      "privilegeName":"Restrict Subnet",
+				      "value":"False"
+				    },
+				    {
+				      "privilegeName":"Unique Name Warning",
+				      "value":"True"
+				    }
+			  	]
+			}
+		},
+		"modify" : {
+			"AdminRestModel" :{
+			"type" : "object",
+			"description" : "Admin model",
+			"properties" : {
+				"authenticationType" : {
+					"type" : "string",
+					"description" : "Authentication Type. One of following values: \n\n'Password',</br>'Certificate',</br>'SAML Managed',</br>'SAML Authenticated'"
+				},
+				"adminStatus" : {
+					"type" : "string",
+					"description" : "Admin Status. One of following values: \n\n'Disabled',</br>'Enabled'"
+				},
+				"contact" : {
+					"type" : "object",
+					"description" : "Person Profile",
+					"properties" : {
+						"lastName" : {
+							"type" : "string",
+							"description" : "Last Name"
+						},
+						"firstName" : {
+							"type" : "string",
+							"description" : "First Name"
+						}
+					}
+				},
+				"location" : {
+					"type" : "object",
+					"description" : "Location",
+					"properties" : {
+						"street1" : {
+							"type" : "string",
+							"description" : "Street1"
+						},
+						"street2" : {
+							"type" : "string",
+							"description" : "Street2"
+						},
+						"city" : {
+							"type" : "string",
+							"description" : "City"
+						},
+						"state" : {
+							"type" : "string",
+							"description" : "State"
+						},
+						"zip" : {
+							"type" : "string",
+							"description" : "Zip"
+						},
+						"country" : {
+							"type" : "string",
+							"description" : "Country"
+						}
+					}
+				},
+				"businessUnitID" : {
+					"type" : "string",
+					"description" : "Business Unit ID"
+				},
+				"defaultPrinter" : {
+					"type" : "string",
+					"description" : "Default Printer ID"
+				},
+				"assignedOrganizations" : {
+					"type" : "array",
+					"description" : "The Organizations to be assigned with Normal Administrator",
+					"items" : {
+						"$ref" : "#/definitions/AssignedOrganizationData"
+					}
+				},
+				"globalPrivileges" : {
+					"type" : "array",
+					"description" : "The Global Privileges to be created with Administrator",
+					"items" : {
+						"$ref" : "#/definitions/PrivilegeData"
+					}
+				},
+				"organizationPrivilegesDefault" : {
+					"type" : "array",
+					"description" : "The Organization Privileges to be created with Normal Administrator",
+					"items" : {
+						"$ref" : "#/definitions/PrivilegeData"
+					}
+				}
+			},
+			"example" : {
+				"authenticationType" : "Password",
+				"adminStatus" : "Enabled",
+				"contact" : {
+					"lastName" : "qipman",
+					"firstName" : "qipman"
+				},
+				"location" : {
+					"street1" : "abc",
+					"street2" : "abc",
+					"city" : "abc",
+					"state" : "abc",
+					"zip" : "123456",
+					"country" : "abc"
+				},
+				"businessUnitID" : "123456",
+				"defaultPrinter" : "abc",
+				"assignedOrganizations":[
+				    {
+				      "orgName":"OrgTest1",
+				      "managedType":"Normal",
+				      "accessPermission":"Write",
+				      "useDefaultOrgPrivileges":"False",
+				      "organizationPrivileges":[
+				        {
+				          "privilegeName":"Access DNS Group",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Access Infrastructure Import",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Access Node Management",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Access V6 Address Management",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Access VisualIP Space Only",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Allow Dynamic MDHCP Update Without DHCP Server Permission",
+				          "value":"True"
+				        },
+				        {
+				          "privilegeName":"Appliance Admin",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Highest Level GUI Mode",
+				          "value":"Basic Mode"
+				        },
+				        {
+				          "privilegeName":"Access Address Allocation",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Allow User Selection",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Display MyView Tab Only",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Require Alias",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Require Contact Name",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Require Location",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Require MAC Address",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Restrict CNAME",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Restrict Subnet",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Unique Name Warning",
+				          "value":"True"
+				        }
+				      ]
+				    },
+				    {
+				      "orgName":"VitalQIP Organization",
+				      "managedType":"Organization",
+				      "accessPermission":"Read",
+				      "useDefaultOrgPrivileges":"True"
+			    	}
+				],
+				"globalPrivileges":[
+					  {
+					    "privilegeName":"Allow Recursive Deletes",
+					    "value":"Temporary",
+					    "subPrivileges":[
+					      {
+					        "privilegeName":"Expiration",
+					        "value":"03/13/2020 12:00"
+					      }
+					    ]
+					  },
+					  {
+					    "privilegeName":"Default Object Class",
+					    "value":"3G Phone"
+					  },
+					  {
+					    "privilegeName":"Allow AC Management",
+					    "value":"False"
+					  },
+					  {
+					    "privilegeName":"Allow Password Expiration",
+					    "value":"True"
+					  },
+					  {
+					    "privilegeName":"Create/Update Administrator",
+					    "value":"False"
+					  },
+					  {
+					    "privilegeName":"IPv4 subnet default view style",
+					    "value":"Table"
+					  },
+					  {
+					    "privilegeName":"Zone default view style",
+					    "value":"Table"
+					  },
+					  {
+					    "privilegeName":"IPv4 network default view style",
+					    "value":"Table"
+					  }
+				],
+				"organizationPrivilegesDefault":[
+				    {
+				      "privilegeName":"Access DNS Group",
+				      "value":"True",
+				      "subPrivileges":[
+				        {
+				          "privilegeName":"Manage DNS Group",
+				          "value":"True"
+				        },
+				        {
+				          "privilegeName":"Generate DNS Group",
+				          "value":"True"
+				        }
+				      ]
+				    },
+				    {
+				      "privilegeName":"Access Infrastructure Import",
+				      "value":"True",
+				      "subPrivileges":[
+				        {
+				          "privilegeName":"Import IPv4 Networks",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Import IPv4 Subnets",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Import IPv4 Objects",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Import IPv6 Pools",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Import IPv6 Blocks",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Import IPv6 Subnets",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Import IPv6 Ranges",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Import IPv6 Addresses",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Import DNS Domains",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Import DNS Records",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Import Subnet Organizations",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Import Nodes",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Import MAC Pools",
+				          "value":"False"
+				        }
+				      ]
+				    },
+				    {
+				      "privilegeName":"Access Address Allocation",
+				      "value":"True",
+				      "subPrivileges":[
+				        {
+				          "privilegeName":"Maintain Blocks",
+				          "value":"True",
+				          "subPrivileges":[
+				            {
+				              "privilegeName":"Expand Blocks",
+				              "value":"False"
+				            },
+				            {
+				              "privilegeName":"Renumber Blocks",
+				              "value":"False"
+				            },
+				            {
+				              "privilegeName":"Split/Merge Blocks",
+				              "value":"False"
+				            },
+				            {
+				              "privilegeName":"Allocate Blocks",
+				              "value":"True",
+				              "subPrivileges":[
+				                {
+				                  "privilegeName":"Rule Level",
+				                  "value":"Normal"
+				                }
+				              ]
+				            },
+				            {
+				              "privilegeName":"Explicitly Create Blocks",
+				              "value":"False"
+				            },
+				            {
+				              "privilegeName":"Free Blocks",
+				              "value":"False"
+				            },
+				            {
+				              "privilegeName":"Move Blocks",
+				              "value":"False"
+				            }
+				          ]
+				        },
+				        {
+				          "privilegeName":"Maintain Pools",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Maintain Seed Pool",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Rule Override",
+				          "value":"False"
+				        },
+				        {
+				          "privilegeName":"Write New Infrastructure to Managed List",
+				          "value":"True"
+				        }
+				      ]
+				    },
+				    {
+				      "privilegeName":"Access Node Management",
+				      "value":"False"
+				    },
+				    {
+				      "privilegeName":"Access V6 Address Management",
+				      "value":"False"
+				    },
+				    {
+				      "privilegeName":"Access VisualIP Space Only",
+				      "value":"False"
+				    },
+				    {
+				      "privilegeName":"Allow Dynamic MDHCP Update Without DHCP Server Permission",
+				      "value":"True"
+				    },
+				    {
+				      "privilegeName":"Appliance Admin",
+				      "value":"False"
+				    },
+				    {
+				      "privilegeName":"Highest Level GUI Mode",
+				      "value":"Advanced Mode",
+				      "subPrivileges":[
+				        {
+				          "privilegeName":"Create Infrastructure",
+				          "value":"True",
+				          "subPrivileges":[
+				            {
+				              "privilegeName":"Dynamic Domain Creation",
+				              "value":"False"
+				            }
+				          ]
+				        },
+				        {
+				          "privilegeName":"Create Resource Records",
+				          "value":"False"
+				        }
+				      ]
+				    },
+				    {
+				      "privilegeName":"Allow User Selection",
+				      "value":"False"
+				    },
+				    {
+				      "privilegeName":"Display MyView Tab Only",
+				      "value":"False"
+				    },
+				    {
+				      "privilegeName":"Require Alias",
+				      "value":"False"
+				    },
+				    {
+				      "privilegeName":"Require Contact Name",
+				      "value":"False"
+				    },
+				    {
+				      "privilegeName":"Require Location",
+				      "value":"False"
+				    },
+				    {
+				      "privilegeName":"Require MAC Address",
+				      "value":"False"
+				    },
+				    {
+				      "privilegeName":"Restrict CNAME",
+				      "value":"False"
+				    },
+				    {
+				      "privilegeName":"Restrict Subnet",
+				      "value":"False"
+				    },
+				    {
+				      "privilegeName":"Unique Name Warning",
+				      "value":"True"
+				    }
+			  	]
+			}
+			}
+		},
+		"SearchAdmin" : {
+			"type": "object",
+			"description": "Search admin result",
+			"properties": {
+				"loginName" : {
+					"type" : "string",
+					"description" : "Login name"
+				},
+				"adminType" : {
+					"type" : "string",
+					"description" : "Administrator Type: Master or Normal"
+				},
+				"authenticationType" : {
+					"type" : "string",
+					"description" : "Authentication Type. One of following values: \n\n'Password',</br>'Certificate',</br>'SAML Managed',</br>'SAML Authenticated'"
+				},
+				"adminStatus" : {
+					"type" : "string",
+					"description" : "Admin Status. One of following values: \n\n'Disabled',</br>'Enabled'"
+				},
+				"assignedOrganizations" : {
+					"type" : "array",
+					"description" : "The Organizations to be assigned with Normal Administrator",
+					"items" : {
+						"$ref" : "#/definitions/AssignedOrganizationData"
+					}
+				}
+			},
+			"example" : {
+				"list" : [{
+							"loginName" : "Master1",
+							"adminType" : "Master",
+							"authenticationType" : "Password",
+							"adminStatus" : "Enabled"
+						}, {
+							"loginName" : "Normal1",
+							"adminType" : "Normal",
+							"authenticationType" : "Password",
+							"adminStatus" : "Enabled",
+							"assignedOrganizations" : [{
+										"orgName" : "OrgTest1",
+										"managedType" : "Normal",
+										"accessPermission" : "Write"
+									}, {
+										"orgName" : "VitalQIP Organization",
+										"managedType" : "Organization",
+										"accessPermission" : "Read"
+									}]
+						}]
+			}
+		}
+	}
+}

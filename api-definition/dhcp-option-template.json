@@ -1,0 +1,1740 @@
+{
+	"post": {
+		"summary" : "Create a DHCP Option Template",
+		"description": "Create a DHCP Option Template",
+		"operationId" : "CreateDHCPTemplate",
+		"tags" : ["DHCPOptionTemplate"],
+		"consumes" : ["application/json", "application/xml"],
+		"produces" : ["application/json", "application/xml"],
+		"parameters" : [{
+			"name" : "Authentication",
+			"in" : "header",
+			"description" : "Token tokenValue<br>or<br>\nBasic loginName:password<br>or<br>\nLeave blank if using Client Certificate Authentication\n",
+			"required" : false,
+			"type" : "string"
+		}, {
+			"in" : "path",
+			"name" : "orgName",
+			"description" : "Organization Name",
+			"required" : true,
+			"type" : "string"
+		}, {
+			"name" : "requestBody",
+			"in" : "body",
+			"description" : "Request body",
+			"required" : true,
+			"schema" : {
+				"$ref" : "#/definitions/dhcpoptiontemplate"
+			}
+		}],
+		"responses" : {
+			"201" : {
+				"description" : "Created",
+				"schema" : {
+					"type" : "string"
+				}
+			},
+			"400" : {
+				"description" : "Required Field(s) Missing: [fieldName]",
+				"schema" : {
+					"type" : "string"
+				}
+			},
+			"403" : {
+				"description" : "Cannot save DHCP Option Template [templateName]: Permission Denied ",
+				"schema" : {
+					"type" : "string"
+				}
+			},
+			"409" : {
+				"description": "DHCP Option Template [templateName] already exists"
+			}
+		}
+	},
+	"put" : {
+		"summary" : "Modify a DHCP Option Template.",
+		"description": "Modify a DHCP Option Template.",
+		"operationId" : "modifyDHCPOptonTemplate",
+		"tags" : ["DHCPOptionTemplate"],
+		"consumes" : ["application/json", "application/xml"],
+		"parameters" : [{
+			"name" : "Authentication",
+			"in" : "header",
+			"description" : "Token tokenValue<br>or<br>\nBasic loginName:password<br>or<br>\nLeave blank if using Client Certificate Authentication\n",
+			"required" : false,
+			"type" : "string"
+		}, {
+			"in" : "path",
+			"name" : "orgName",
+			"description" : "Organization Name",
+			"required" : true,
+			"type" : "string"
+		},
+		{
+			"name" : "templateName",
+			"in" : "query",
+			"description" : "DHCP Option Name",
+			"required" : true,
+			"type" : "string"		
+		},{
+			"name" : "requestBody",
+			"in" : "body",
+			"description" : "Request Body",
+			"required" : true,
+			"schema" : {
+				"$ref" : "#/definitions/list"
+			}
+		}],
+		"responses" : {
+			"200" : {
+				"description" : "OK",
+				"schema" : {
+					"type" : "string"
+				}
+			},
+			"404" : {
+				"description" : "DHCP Option Template &lt;templateName&gt; was not found.",
+				"schema" : {
+					"type" : "string"
+				}
+			},
+			"403" : {
+				"description" : "Cannot modify DHCP Option Template [templateName]: Permission Denied ",
+				"schema" : {
+					"type" : "string"
+				}
+			}
+		}
+	},
+	"delete" : {
+		"description" : "Delete a DHCP Option Template by name",
+		"summary" : "Delete a DHCP Option Template",
+		"operationId" : "deleteDhcpOptionTemplate",
+		"tags" : ["DHCPOptionTemplate"],
+		"parameters" : [{
+			"name" : "Authentication",
+			"in" : "header",
+			"description" : "Token tokenValue<br>or<br>\nBasic username:password<br>or<br>\nLeave blank if using Client Certificate Authentication\n",
+			"required" : false,
+			"type" : "string",
+			"format" : "string"
+		},{
+			"name" : "Content-Type",
+			"in" : "header",
+			"required" : true,
+			"type" : "string",
+			"format" : "string",
+			"enum" : [
+				"application/json",
+				"application/xml"
+			]
+		},{
+			"in" : "path",
+			"name" : "orgName",
+			"description" : "Organization Name",
+			"required" : true,
+			"type" : "string"
+		},{
+			"in" : "query",
+			"name" : "templateName",
+			"description" : "DHCP Option Template Name",
+			"required" : true,
+			"type" : "string"
+		}],
+		"responses" : {
+			"204" : {
+				"description" : "NO CONTENT",
+				"schema" : {
+					"type" : "string"
+				}
+			},
+			"403" : {
+				"description" : "Invalid permissions for the requested operation.",
+				"schema" : {
+					"type" : "string"
+				}
+			},
+			"404" : {
+				"description" : "DHCP Option Template &lt;templateName&gt; was not found.",
+				"schema" : {
+					"type" : "string"
+				}
+			}
+		}
+	},
+	"getDHCPOptTmpl": {
+		"get" : {
+			"summary" : "Get DHCP Options Template by Subnet/Object/DHCP Option Template",
+			"description" : "Get DHCP Options Template by Subnet/Object/DHCP Template",
+			"operationId" : "getDHCPOptionTemplate",
+			"tags" : ["DHCPOptionTemplate"],
+			"consumes" : ["application/json", "application/xml"],
+			"produces" : ["application/json", "application/xml"],
+			"parameters" : [
+				{
+					"name" : "Authentication",
+					"in" : "header",
+					"description" : "Token tokenValue<br>or<br>\nBasic loginName:password<br>or<br>\nLeave blank if using Client Certificate Authentication\n",
+					"required" : false,
+					"type" : "string"
+				},
+				{
+					"in": "path",
+					"name": "orgName",
+					"description": "Organization Name",
+					"required": true,
+					"type": "string"
+				},
+				{
+					"in": "path",
+					"name": "extension",
+					"description": ".json for a response in JSON format.<br> \n.xml for a response in XML format.\n",
+					"required": true,
+					"type": "string",
+					"enum": [
+						".json",
+						".xml"
+					]
+				},
+				{
+					"in" : "query",
+					"name" : "address",
+					"description" : "Required for Subnet/Object types",
+					"required" : false,
+					"type" : "string"
+				},
+				{
+					"in" : "query",
+					"name" : "templateName",
+					"description" : "Required for Template type",
+					"required" : false,
+					"type" : "string",
+					"display":"none"
+				},
+				{
+	                "in": "path",
+	                "name": "infraType",
+	                "description": "infrastructure type: Object|Subnet|Template",
+	                "required": true,
+	                "type": "string",
+	                "enum": [
+	                	"OBJECT",
+	                    "SUBNET",
+	                    "TEMPLATE"
+	                ]
+	            }
+			],
+			"responses" : {
+				"200" : {
+					"description" : "OK",
+					"schema" : {
+						"$ref" : "#/definitions/DhcpOptTemplate"
+					}
+				},
+				"406" : {
+					"description" : "Paginated list indexes start at 1",
+					"schema" : {
+						"type" : "string"
+					}
+				},
+				"404" : {
+					"description" : "Subnet/Object not found.\n",
+					"schema" : {
+						"type" : "string"
+					}
+				}
+			}
+		}
+	},
+	"searchDhcpOptionTmplByOptNum" : {
+		"get" : {
+			"summary" : "Search DHCP Option Template by Option Number",
+			"description" : "Search DHCP Option Template by Option Number. It just return the list of DHCP Option Template name",
+			"operationId" : "searchDhcpOptionTemplateOptNum",
+			"tags" : ["DHCPOptionTemplate"],
+			"consumes" : ["appplication/json", "application/xml"],
+			"produces" : ["appplication/json", "application/xml"],
+			"parameters" : [{
+				"name" : "Authentication",
+				"in" : "header",
+				"description" : "oken tokenValue<br>or<br>\nBasic loginName:password<br>or<br>\nLeave blank if using Client Certificate Authentication\n",
+				"required" : false,
+				"type" : "string"
+			},{
+				"in" : "path",
+				"name" : "orgName",
+				"description" : "Organization Name",
+				"required" : true,
+				"type" : "string"
+			}, {
+				"in" : "path",
+				"name" : "extension",
+				"description" : ".json for a response in JSON format.<br> \n.xml for a response in XML format.\n",
+				"required" : true,
+				"type" : "string",
+				"enum" : [".json", ".xml"]
+			}, {
+				"in" : "query",
+				"name" : "optionNumber",
+				"description" : "The Option Number of DHCP Option Template<br><br> Maximum value is 514<br><br> Minimum value is 1",
+				"required" : true,
+				"type" : "integer",
+				"minimum" : 1,
+				"maximum" : 514
+			}, {
+				"in" : "query",
+				"name" : "pageIndex",
+				"description" : "Page index. Default value is 1.<br><br> Minimum value is 1",
+				"required" : false,
+				"type" : "integer",
+				"minimum" : 1
+			}, {
+				"in" : "query",
+				"name" : "pageSize",
+				"description" : "Page size. Default value is 100.<br><br> Minimum value is 1.<br><br> Maximum value is 10000",
+				"required" : false,
+				"type" : "integer",
+				"minimum" : 1,
+				"maximum" : 10000
+			}],
+			"responses" : {
+				"200" : {
+					"description" : "OK",
+					"schema" : {
+						"$ref" : "#/definitions/searchoptiontemplatebyoptnum"
+					}
+				},
+				"406" : {
+					"description" : "Paginated list indexes start at 1",
+					"schema" : {
+						"type" : "string"
+					}
+				}
+			}
+		}
+	},
+	"searchDhcpOptionTmplByName" : {
+		"get" : {
+			"summary" : "Search DHCP Option Template by name",
+			"description" : "Search Dhcp Option Template by name. It return the list of infrastructure elements.",
+			"operationId" : "searchDhcpOptionTemplateName",
+			"tags" : ["DHCPOptionTemplate"],
+			"consumes" : ["application/json", "application/xml"],
+			"produces" : ["application/json", "application/xml"],
+			"parameters" : [{
+				"name" : "Authentication",
+				"in" : "header",
+				"description" : "Token tokenValue<br>or<br>\nBasic loginName:password<br>or<br>\nLeave blank if using Client Certificate Authentication\n",
+				"required" : false,
+				"type" : "string"
+			}, {
+				"in" : "path",
+				"name" : "orgName",
+				"description" : "Organization Name",
+				"required" : true,
+				"type" : "string"
+			}, {
+				"in" : "path",
+				"name" : "extension",
+				"description" : ".json for a response in JSON format.<br> \n.xml for a response in XML format.\n",
+				"required" : true,
+				"type" : "string",
+				"enum" : [".json", ".xml"]
+			}, {
+				"in" : "query",
+				"name" : "templateName",
+				"description" : "The name of DHCP Option Template",
+				"required" : true,
+				"type" : "string"
+			}, {
+				"in" : "query",
+				"name" : "startIndex",
+				"description" : "Default value is 1.<br><br> Minimum value is 1",
+				"required" : false,
+				"type" : "integer",
+				"minimum" : 1
+			}, {
+				"in" : "query",
+				"name" : "numberElement",
+				"description" : "Default value is 100.<br><br> Minimum value is 1.<br><br> Maximum value is 10000",
+				"required" : false,
+				"type" : "integer",
+				"minimum" : 1,
+				"maximum" : 10000
+			}],
+			"responses" : {
+				"200" : {
+					"description" : "OK",
+					"schema" : {
+						"$ref" : "#/definitions/searchoptiontemplatebyname"
+					}
+				},
+				"404" : {
+					"description" : "DHCP Option Template not found.\n",
+					"schema" : {
+						"type" : "string"
+					}
+				},
+				"406" : {
+					"description" : "Paginated list indexes start at 1",
+					"schema" : {
+						"type" : "string"
+					}
+				}
+			}
+		}
+	},
+	"definitions" : {
+		"dhcpoptiontemplate" : {
+			"type" : "object",
+			"required" : ["templateName"],
+			"properties" : {
+				"templateName" : {
+					"type" : "string",
+					"description" : "Name of DHCP OPTION"
+				},
+				"listOptions" : {
+					"type" : "array",
+					"items" : {
+						"$ref" : "#/definitions/option"
+					},
+					"xml" : {
+						"name" : "options"
+					}
+				}
+			},
+			"example" : {
+				"templateName" : "ExampleTemplate",
+				"options" : [
+					{
+						"optionName" : "CableLabs Client Config",
+						"childOption" : [
+							{
+								"optionName" : "SP Primary DHCP Server Address",
+								"value" : "10.0.0.10"
+							},
+							{
+								"optionName" : "SP Secondary DHCP Server Address",
+								"value" : "10.0.0.11"
+							},
+							{
+								"optionName" : "SP SNMP Entity Address",
+								"value" : "10.0.0.12"
+							},
+							{
+								"optionName" : "SP Primary DNS Server Address",
+								"value" : "10.0.0.13"
+							},
+							{
+								"optionName" : "SP Secondary DNS Server Address",
+								"value" : "10.0.0.14"
+							},
+							{
+								"optionName" : "Kerberos Realm",
+								"value" : "kerberos.mycorp.net"
+							},
+							{
+								"optionName" : "Use Ticket-Granting-Ticket",
+								"value" : "false"
+							},
+							{
+								"optionName" : "Provisioning Timer",
+								"value" : "30"
+							},
+							{
+								"optionName" : "CMS FQDN",
+								"value" : "cms.mycorp.net"
+							}
+						]
+					},
+					{
+						"optionName" : "CableLabs Client Config (122)",
+						"childOption" : [
+							{
+								"optionName" : "TSP AP-REQ/AP-REP Backoff and Retry",
+								"childOption" : [
+									{
+										"optionName" : "Maximum Retry",
+										"value" : "100"
+									},
+									{
+										"optionName" : "Maximum Timeout",
+										"value" : "100"
+									},
+									{
+										"optionName" : "Nominal Timeout",
+										"value" : "50"
+									}
+								]
+							},
+							{
+								"optionName" : "TSP AS-REQ/AS-REP Backoff and Retry",
+								"childOption" : [
+									{
+										"optionName" : "Maximum Retry",
+										"value" : "100"
+									},
+									{
+										"optionName" : "Maximum Timeout",
+										"value" : "100"
+									},
+									{
+										"optionName" : "Nominal Timeout",
+										"value" : "50"
+									}
+								]
+							},
+							{
+								"optionName" : "TSP Kerberos Realm Name",
+								"value" : "kerberos.mycorp.net"
+							},
+							{
+								"optionName" : "TSP Primary DHCP Server Address",
+								"value" : "10.0.0.15"
+							},
+							{
+								"optionName" : "TSP Provisioning Server Address",
+								"value" : "FQDN",
+								"childOption" : [
+									{
+										"optionName" : "FQDN",
+										"value" : "example.com"
+									}
+								]
+							},
+							{
+								"optionName" : "TSP Provisioning Timer",
+								"value" : "22"
+							},
+							{
+								"optionName" : "TSP Secondary DHCP Server Address",
+								"value" : "10.0.0.16"
+							},
+							{
+								
+								"optionName" : "TSP Ticket Granting Server Utilization",
+								"value" : "false"
+							}
+						]
+					},
+					{
+						"optionName" : "Boot File Size",
+						"value" : "65535"
+					},
+					{
+						"optionName" : "Cookie Server",
+						"value" : "10.0.0.17 10.0.0.18"
+					},
+					{
+						"optionName" : "Domain Name",
+						"value" : "User Defined",
+						"childOption" : [
+							{
+								"optionName" : "User Defined",
+								"value" : "example.com"
+							}
+						]
+					},
+					{
+						"optionName" : "Domain Name Server",
+						"value" : "Same as in Subnet Profile",
+						"childOption" : [
+							{
+								"optionName" : "Same as in Subnet Profile"
+							}
+						]
+					},
+					{
+						"optionName" : "Extensions Path",
+						"value" : "c:\\qip"
+					},
+					{
+						"optionName" : "Host Name",
+						"value" : "User Defined",
+						"childOption" : [
+							{
+								"optionName" : "User Defined",
+								"value" : "example.com"
+							}
+						]
+					},
+					{
+						"optionName" : "Impress Server",
+						"value" : "10.0.0.19 10.0.0.20"
+					},
+					{
+						"optionName" : "LPR Server",
+						"value" : "10.0.0.21 10.0.0.22"
+					},
+					{
+						"optionName" : "Log Server",
+						"value" : "10.0.0.23 10.0.0.24"
+					},
+					{
+						"optionName" : "Merit Dump File",
+						"value" : "meritFile"
+					},
+					{
+						"optionName" : "Name Server",
+						"value" : "10.0.0.25 10.0.0.26"
+					},
+					{
+						"optionName" : "Resource Location Server",
+						"value" : "10.0.0.27 10.0.0.28"
+					},
+					{
+				 		"optionName" : "Root Path",
+						"value" : "c:\\qip"
+					},
+					{
+				 		"optionName" : "Router",
+						"value" : "Same as in Subnet Profile",
+						"childOption" : [
+							{
+								"optionName" : "Same as in Subnet Profile"
+							}
+						]
+					},
+					{
+						"optionName" : "Subnet Mask",
+						"value" : "Same as in Subnet Profile",
+						"childOption" : [
+							{
+								"optionName" : "Same as in Subnet Profile"
+							}
+						]
+					},
+					{
+						"optionName" : "Swap Server",
+						"value" : "10.0.0.31"
+					},
+					{
+						"optionName" : "Time Offset",
+						"value" : "1000"
+					},
+					{
+						"optionName" : "Time Server",
+						"value" : "Same as in Subnet Profile",
+						"childOption" : [
+							{
+								"optionName" : "Same as in Subnet Profile"
+							}
+						]
+					},
+					{
+						"optionName" : "Default IP Time-to-live",
+						"value" : "1"
+					},
+					{
+						"optionName" : "IP Forwarding Enable/Disable",
+						"value" : "false"
+					},
+					{
+						"optionName" : "Maximum Datagram Reassembly Size",
+						"value" : "576"
+					},
+					{
+						"optionName" : "Non-Local Source Routing Enable/Disable",
+						"value" : "false"
+					},
+					{
+						"optionName" : "Path MTU Aging Timeout",
+						"value" : "1000"
+					},
+					{
+						"optionName" : "Path MTU Plateau Table",
+						"value" : "69"
+					},
+					{
+						"optionName" : "Policy Filter",
+						"value" : "10.0.0.32 255.0.0.0"
+					},
+					{
+						"optionName" : "All Subnets are Local",
+						"value" : "false"
+					},
+					{
+						"optionName" : "Broadcast Address",
+						"value" : "Same as in Subnet Profile",
+						"childOption" : [
+							{
+								"optionName" : "Same as in Subnet Profile"
+							}
+						]
+					},
+					{
+						"optionName" : "Interface MTU",
+						"value" : "65535"
+					},
+					{
+						"optionName" : "Mask Supplier",
+						"value" : "false"
+					},
+					{
+						"optionName" : "Perform Mask Discovery",
+						"value" : "false"
+					},
+					{
+						"optionName" : "Perform Router Discovery",
+						"value" : "false"
+					},
+					{
+						"optionName" : "Router Solicitation Address",
+						"value" : "10.0.0.33"
+					},
+					{
+						"optionName" : "Static Route",
+						"value" : "10.0.0.1 10.0.0.2"
+					},
+					{
+						"optionName" : "Classless Static Route",
+						"value" : "10.0.0.0 255.0.0.0 10.0.0.1"
+					},
+					{
+						"optionName" : "ARP Cache Timeout",
+						"value" : "1000"
+					},
+					{
+						"optionName" : "Ethernet Encapsulation",
+						"value" : "false"
+					},
+					{
+						"optionName" : "Trailer Encapsulation",
+						"value" : "false"
+					},
+					{
+						"optionName" : "TCP Default TTL",
+						"value" : "251"
+					},
+					{
+						"optionName" : "TCP Keepalive Garbage",
+						"value" : "false"
+					},
+					{
+						"optionName" : "TCP Keepalive Interval",
+						"value" : "1000"
+					},
+					{
+						"optionName" : "Default Finger Server",
+						"value" : "10.0.0.35 10.0.0.36"
+					},
+					{
+						"optionName" : "Default Internet Relay Chat (IRC) Server",
+						"value" : "10.0.0.37 10.0.0.38"
+					},
+					{
+						"optionName" : "Default World Wide Web (WWW) Server",
+						"value" : "10.0.0.39 10.0.0.40"
+					},
+					{
+						"optionName" : "Microsoft Default Router Metric Base",
+						"value" : "1000"
+					},
+					{
+						"optionName" : "Microsoft Disable Netbios",
+						"value" : "1000"
+					},
+					{
+						"optionName" : "Microsoft Release DHCP Lease on Shutdown",
+						"value" : "1000"
+					},
+					{
+						"optionName" : "Mobile IP Home Agent",
+						"value" : "10.0.0.41 10.0.0.42"
+					},
+					{
+						"optionName" : "Multicast TTL",
+						"value" : "251"
+					},
+					{
+						"optionName" : "NetBIOS over TCP/IP Datagram Distribution Server",
+						"value" : "10.0.0.43 10.0.0.44"
+					},
+					{
+						"optionName" : "NetBIOS over TCP/IP Name Server",
+						"value" : "10.0.0.45 10.0.0.46"
+					},
+					{
+						"optionName" : "NetBIOS over TCP/IP Node Type",
+						"value" : "B-node"
+					},
+					{
+						"optionName" : "NetBIOS over TCP/IP Scope"
+					},
+					{
+						"optionName" : "Network Information Servers",
+						"value" : "Same as in Subnet Profile",
+						"childOption" : [
+							{
+								"optionName" : "Same as in Subnet Profile"
+							}
+						]
+					},
+					{
+						"optionName" : "Network Information Service Domain",
+						"value" : "Same as in Subnet Profile",
+						"childOption" : [
+							{
+								"optionName" : "Same as in Subnet Profile"
+							}
+						]
+					},
+					{
+						"optionName" : "Network Information Service+Domain",
+						"value" : "example.com"
+					},
+					{
+						
+						"optionName" : "Network Information Service+Servers",
+						"value" : "10.0.0.47"
+					},
+					{
+						"optionName" : "Network News Transport Protocol (NNTP) Server",
+						"value" : "10.0.0.48"
+					},
+					{
+						"optionName" : "Network Time Protocol Servers",
+						"value" : "Same as in Subnet Profile",
+						"childOption" : [
+							{
+								"optionName" : "Same as in Subnet Profile"
+							}
+						]
+					},
+					{
+						"optionName" : "Post Office Protocol (POP3) Server",
+						"value" : "10.0.0.49 10.0.0.50"
+					},
+					{
+						"optionName" : "Scope Life",
+						"value" : "1000"
+					},
+					{
+						"optionName" : "Simple Mail Transport Protocol (SMTP) Server",
+						"value" : "10.0.0.51"
+					},
+					{
+						"optionName" : "StreetTalk Directory Assistance (STDA) Server",
+						"value" : "10.0.0.52 10.0.0.53"
+					},
+					{
+						"optionName" : "StreetTalk Server",
+						"value" : "10.0.0.54 10.0.0.55"
+					},
+					{
+						"optionName" : "Vendor Specific Information"
+					},
+					{
+						"optionName" : "X Window System Display Manager",
+						"value" : "10.0.0.54"
+					},
+					{
+						"optionName" : "X Window System Font Server",
+						"value" : "10.0.0.55 10.0.0.56"
+					},
+					{
+						"optionName" : "Broadcast and Multicast Control Service Domain List"
+					},
+					{
+						"optionName" : "Broadcast and Multicast Control Service Address List",
+						"value" : "10.0.0.57"
+					},
+					{
+						"optionName" : "Timezone specified as IEEE 1003.1 String",
+						"value" : "1010"
+					},
+					{
+						"optionName" : "Timezone specified as TZ Database String",
+						"value" : "1010"
+					},
+					{
+						"optionName" : "SIP Server Address List",
+						"value" : "10.0.0.58 10.0.0.59"
+					},
+					{
+						"optionName" : "SIP Server Domain List",
+						"value" : "10.0.0.60 10.0.0.61"
+					},
+					{
+						"optionName" : "Bootfile Name",
+						"value" : "bootfile"
+					},
+					{
+						"optionName" : "Client Identifier",
+						"value" : "client1"
+					},
+					{
+						"optionName" : "IP Address Lease Time",
+						"value" : "Limited",
+						"childOption" : [
+							{
+								"optionName" : "Limited Lease Time",
+								"value" : "900000"
+							}
+						]
+					},
+					{
+						"optionName" : "Option Overload",
+						"value" : "2"
+					},
+					{
+						"optionName" : "Rebinding (T2) Time",
+						"value" : "1000"
+					},
+					{
+						"optionName" : "Renewal (T1) Time",
+						"value" : "1000"
+					},
+					{
+						"optionName" : "TFTP Server Name",
+						"value" : "TFTPServer"
+					},
+					{
+						"optionName" : "Vendor Class Identifier"
+					},
+					{
+						"optionName" : "NDS Context"
+					},
+					{
+						"optionName" : "NDS Servers",
+						"value" : "10.0.0.0.60 10.0.0.61"
+					},
+					{
+						"optionName" : "NDS Tree Name",
+						"value" : "NDS_Tree1"
+					},
+					{
+						"optionName" : "Netware/IP Domain Name",
+						"value" : "example.com"
+					},
+					{
+						"optionName" : "Netware/IP Information",
+						"childOption" : [
+							{
+								"optionName" : "NWIP Setting",
+								"value" : "NWIP_EXIST_IN_OPTIONS_AREA",
+								"childOption" : [
+									{
+										"optionName" : "AUTORETRIES",
+										"value" : "1000"
+									},
+									{
+										"optionName" : "AUTORETRY_SECS",
+										"value" : "1000"
+									},
+									{
+										"optionName" : "NEAREST_NWIP_SERVER",
+										"value" : "10.0.0.62 10.0.0.63"
+									},
+									{
+										"optionName" : "NSQ_BROADCAST",
+										"value" : "<Not Set>"
+									},
+									{
+										"optionName" : "NWIP_1_1",
+										"value" : "<Not Set>"
+									},
+									{
+										"optionName" : "PREFERRED_DSS",
+										"value" : "10.0.0.64"
+									},
+									{
+										"optionName" : "PRIMARY_DSS",
+										"value" : "10.0.0.65"
+									}
+								]
+							}
+						]
+					},
+					{
+						"optionName" : "Auto Configuration of IPv4 Clients",
+						"value" : "False"
+					},
+					{
+						"optionName" : "SLP Directory Agent",
+						"childOption" : [
+							{
+								"optionName" : "Directory Agent Address",
+								"value" : "10.0.0.66"
+							},
+							{
+								"optionName" : "Mandatory",
+								"value" : "false"
+							}
+						]
+					},
+					{
+						"optionName" : "SLP Service Scope",
+						"childOption" : [
+							{
+								"optionName" : "Mandatory",
+								"value" : "false"
+							},
+							{
+								"optionName" : "Scope List",
+								"value" : "192.168.88.3-192.168.88.7, 192.168.88.8-192.168.88.20"
+							}
+						]
+					},
+					{
+						"optionName" : "User Authentication Protocol"
+					},
+					{
+						"optionName" : "Domain Search Option"
+					}
+				]
+			}
+		},
+		"list" : {
+			"type" : "object",
+			"properties" : {
+				"options" : {
+					"type" : "array",
+					"items" : {
+						"$ref" : "#/definitions/option"
+					}
+				}
+			},
+			"example" : {
+				"list" : [
+					{
+						"optionName" : "CableLabs Client Config",
+						"childOption" : [
+							{
+								"optionName" : "SP Primary DHCP Server Address",
+								"value" : "10.0.0.10"
+							},
+							{
+								"optionName" : "SP Secondary DHCP Server Address",
+								"value" : "10.0.0.11"
+							},
+							{
+								"optionName" : "SP SNMP Entity Address",
+								"value" : "10.0.0.12"
+							},
+							{
+								"optionName" : "SP Primary DNS Server Address",
+								"value" : "10.0.0.13"
+							},
+							{
+								"optionName" : "SP Secondary DNS Server Address",
+								"value" : "10.0.0.14"
+							},
+							{
+								"optionName" : "Kerberos Realm",
+								"value" : "kerberos.mycorp.net"
+							},
+							{
+								"optionName" : "Use Ticket-Granting-Ticket",
+								"value" : "false"
+							},
+							{
+								"optionName" : "Provisioning Timer",
+								"value" : "30"
+							},
+							{
+								"optionName" : "CMS FQDN",
+								"value" : "cms.mycorp.net"
+							}
+						]
+					},
+					{
+						"optionName" : "CableLabs Client Config (122)",
+						"childOption" : [
+							{
+								"optionName" : "TSP AP-REQ/AP-REP Backoff and Retry",
+								"childOption" : [
+									{
+										"optionName" : "Maximum Retry",
+										"value" : "100"
+									},
+									{
+										"optionName" : "Maximum Timeout",
+										"value" : "100"
+									},
+									{
+										"optionName" : "Nominal Timeout",
+										"value" : "50"
+									}
+								]
+							},
+							{
+								"optionName" : "TSP AS-REQ/AS-REP Backoff and Retry",
+								"childOption" : [
+									{
+										"optionName" : "Maximum Retry",
+										"value" : "100"
+									},
+									{
+										"optionName" : "Maximum Timeout",
+										"value" : "100"
+									},
+									{
+										"optionName" : "Nominal Timeout",
+										"value" : "50"
+									}
+								]
+							},
+							{
+								"optionName" : "TSP Kerberos Realm Name",
+								"value" : "kerberos.mycorp.net"
+							},
+							{
+								"optionName" : "TSP Primary DHCP Server Address",
+								"value" : "10.0.0.15"
+							},
+							{
+								"optionName" : "TSP Provisioning Server Address",
+								"value" : "FQDN",
+								"childOption" : [
+									{
+										"optionName" : "FQDN",
+										"value" : "example.com"
+									}
+								]
+							},
+							{
+								"optionName" : "TSP Provisioning Timer",
+								"value" : "22"
+							},
+							{
+								"optionName" : "TSP Secondary DHCP Server Address",
+								"value" : "10.0.0.16"
+							},
+							{
+								
+								"optionName" : "TSP Ticket Granting Server Utilization",
+								"value" : "false"
+							}
+						]
+					},
+					{
+						"optionName" : "Boot File Size",
+						"value" : "65535"
+					},
+					{
+						"optionName" : "Cookie Server",
+						"value" : "10.0.0.17 10.0.0.18"
+					},
+					{
+						"optionName" : "Domain Name",
+						"value" : "User Defined",
+						"childOption" : [
+							{
+								"optionName" : "User Defined",
+								"value" : "example.com"
+							}
+						]
+					},
+					{
+						"optionName" : "Domain Name Server",
+						"value" : "Same as in Subnet Profile",
+						"childOption" : [
+							{
+								"optionName" : "Same as in Subnet Profile"
+							}
+						]
+					},
+					{
+						"optionName" : "Extensions Path",
+						"value" : "c:\\qip"
+					},
+					{
+						"optionName" : "Host Name",
+						"value" : "User Defined",
+						"childOption" : [
+							{
+								"optionName" : "User Defined",
+								"value" : "example.com"
+							}
+						]
+					},
+					{
+						"optionName" : "Impress Server",
+						"value" : "10.0.0.19 10.0.0.20"
+					},
+					{
+						"optionName" : "LPR Server",
+						"value" : "10.0.0.21 10.0.0.22"
+					},
+					{
+						"optionName" : "Log Server",
+						"value" : "10.0.0.23 10.0.0.24"
+					},
+					{
+						"optionName" : "Merit Dump File",
+						"value" : "meritFile"
+					},
+					{
+						"optionName" : "Name Server",
+						"value" : "10.0.0.25 10.0.0.26"
+					},
+					{
+						"optionName" : "Resource Location Server",
+						"value" : "10.0.0.27 10.0.0.28"
+					},
+					{
+				 		"optionName" : "Root Path",
+						"value" : "c:\\qip"
+					},
+					{
+				 		"optionName" : "Router",
+						"value" : "Same as in Subnet Profile",
+						"childOption" : [
+							{
+								"optionName" : "Same as in Subnet Profile"
+							}
+						]
+					},
+					{
+						"optionName" : "Subnet Mask",
+						"value" : "Same as in Subnet Profile",
+						"childOption" : [
+							{
+								"optionName" : "Same as in Subnet Profile"
+							}
+						]
+					},
+					{
+						"optionName" : "Swap Server",
+						"value" : "10.0.0.31"
+					},
+					{
+						"optionName" : "Time Offset",
+						"value" : "1000"
+					},
+					{
+						"optionName" : "Time Server",
+						"value" : "Same as in Subnet Profile",
+						"childOption" : [
+							{
+								"optionName" : "Same as in Subnet Profile"
+							}
+						]
+					},
+					{
+						"optionName" : "Default IP Time-to-live",
+						"value" : "1"
+					},
+					{
+						"optionName" : "IP Forwarding Enable/Disable",
+						"value" : "false"
+					},
+					{
+						"optionName" : "Maximum Datagram Reassembly Size",
+						"value" : "576"
+					},
+					{
+						"optionName" : "Non-Local Source Routing Enable/Disable",
+						"value" : "false"
+					},
+					{
+						"optionName" : "Path MTU Aging Timeout",
+						"value" : "1000"
+					},
+					{
+						"optionName" : "Path MTU Plateau Table",
+						"value" : "69"
+					},
+					{
+						"optionName" : "Policy Filter",
+						"value" : "10.0.0.32 255.0.0.0"
+					},
+					{
+						"optionName" : "All Subnets are Local",
+						"value" : "false"
+					},
+					{
+						"optionName" : "Broadcast Address",
+						"value" : "Same as in Subnet Profile",
+						"childOption" : [
+							{
+								"optionName" : "Same as in Subnet Profile"
+							}
+						]
+					},
+					{
+						"optionName" : "Interface MTU",
+						"value" : "65535"
+					},
+					{
+						"optionName" : "Mask Supplier",
+						"value" : "false"
+					},
+					{
+						"optionName" : "Perform Mask Discovery",
+						"value" : "false"
+					},
+					{
+						"optionName" : "Perform Router Discovery",
+						"value" : "false"
+					},
+					{
+						"optionName" : "Router Solicitation Address",
+						"value" : "10.0.0.33"
+					},
+					{
+						"optionName" : "Static Route",
+						"value" : "10.0.0.1 10.0.0.2"
+					},
+					{
+						"optionName" : "Classless Static Route",
+						"value" : "10.0.0.0 255.0.0.0 10.0.0.1"
+					},
+					{
+						"optionName" : "ARP Cache Timeout",
+						"value" : "1000"
+					},
+					{
+						"optionName" : "Ethernet Encapsulation",
+						"value" : "false"
+					},
+					{
+						"optionName" : "Trailer Encapsulation",
+						"value" : "false"
+					},
+					{
+						"optionName" : "TCP Default TTL",
+						"value" : "251"
+					},
+					{
+						"optionName" : "TCP Keepalive Garbage",
+						"value" : "false"
+					},
+					{
+						"optionName" : "TCP Keepalive Interval",
+						"value" : "1000"
+					},
+					{
+						"optionName" : "Default Finger Server",
+						"value" : "10.0.0.35 10.0.0.36"
+					},
+					{
+						"optionName" : "Default Internet Relay Chat (IRC) Server",
+						"value" : "10.0.0.37 10.0.0.38"
+					},
+					{
+						"optionName" : "Default World Wide Web (WWW) Server",
+						"value" : "10.0.0.39 10.0.0.40"
+					},
+					{
+						"optionName" : "Microsoft Default Router Metric Base",
+						"value" : "1000"
+					},
+					{
+						"optionName" : "Microsoft Disable Netbios",
+						"value" : "1000"
+					},
+					{
+						"optionName" : "Microsoft Release DHCP Lease on Shutdown",
+						"value" : "1000"
+					},
+					{
+						"optionName" : "Mobile IP Home Agent",
+						"value" : "10.0.0.41 10.0.0.42"
+					},
+					{
+						"optionName" : "Multicast TTL",
+						"value" : "251"
+					},
+					{
+						"optionName" : "NetBIOS over TCP/IP Datagram Distribution Server",
+						"value" : "10.0.0.43 10.0.0.44"
+					},
+					{
+						"optionName" : "NetBIOS over TCP/IP Name Server",
+						"value" : "10.0.0.45 10.0.0.46"
+					},
+					{
+						"optionName" : "NetBIOS over TCP/IP Node Type",
+						"value" : "B-node"
+					},
+					{
+						"optionName" : "NetBIOS over TCP/IP Scope"
+					},
+					{
+						"optionName" : "Network Information Servers",
+						"value" : "Same as in Subnet Profile",
+						"childOption" : [
+							{
+								"optionName" : "Same as in Subnet Profile"
+							}
+						]
+					},
+					{
+						"optionName" : "Network Information Service Domain",
+						"value" : "Same as in Subnet Profile",
+						"childOption" : [
+							{
+								"optionName" : "Same as in Subnet Profile"
+							}
+						]
+					},
+					{
+						"optionName" : "Network Information Service+Domain",
+						"value" : "example.com"
+					},
+					{
+						
+						"optionName" : "Network Information Service+Servers",
+						"value" : "10.0.0.47"
+					},
+					{
+						"optionName" : "Network News Transport Protocol (NNTP) Server",
+						"value" : "10.0.0.48"
+					},
+					{
+						"optionName" : "Network Time Protocol Servers",
+						"value" : "Same as in Subnet Profile",
+						"childOption" : [
+							{
+								"optionName" : "Same as in Subnet Profile"
+							}
+						]
+					},
+					{
+						"optionName" : "Post Office Protocol (POP3) Server",
+						"value" : "10.0.0.49 10.0.0.50"
+					},
+					{
+						"optionName" : "Scope Life",
+						"value" : "1000"
+					},
+					{
+						"optionName" : "Simple Mail Transport Protocol (SMTP) Server",
+						"value" : "10.0.0.51"
+					},
+					{
+						"optionName" : "StreetTalk Directory Assistance (STDA) Server",
+						"value" : "10.0.0.52 10.0.0.53"
+					},
+					{
+						"optionName" : "StreetTalk Server",
+						"value" : "10.0.0.54 10.0.0.55"
+					},
+					{
+						"optionName" : "Vendor Specific Information"
+					},
+					{
+						"optionName" : "X Window System Display Manager",
+						"value" : "10.0.0.54"
+					},
+					{
+						"optionName" : "X Window System Font Server",
+						"value" : "10.0.0.55 10.0.0.56"
+					},
+					{
+						"optionName" : "Broadcast and Multicast Control Service Domain List"
+					},
+					{
+						"optionName" : "Broadcast and Multicast Control Service Address List",
+						"value" : "10.0.0.57"
+					},
+					{
+						"optionName" : "Timezone specified as IEEE 1003.1 String",
+						"value" : "1010"
+					},
+					{
+						"optionName" : "Timezone specified as TZ Database String",
+						"value" : "1010"
+					},
+					{
+						"optionName" : "SIP Server Address List",
+						"value" : "10.0.0.58 10.0.0.59"
+					},
+					{
+						"optionName" : "SIP Server Domain List",
+						"value" : "10.0.0.60 10.0.0.61"
+					},
+					{
+						"optionName" : "Bootfile Name",
+						"value" : "bootfile"
+					},
+					{
+						"optionName" : "Client Identifier",
+						"value" : "client1"
+					},
+					{
+						"optionName" : "IP Address Lease Time",
+						"value" : "Limited",
+						"childOption" : [
+							{
+								"optionName" : "Limited",
+								"value" : "900000"
+							}
+						]
+					},
+					{
+						"optionName" : "Option Overload",
+						"value" : "2"
+					},
+					{
+						"optionName" : "Rebinding (T2) Time",
+						"value" : "1000"
+					},
+					{
+						"optionName" : "Renewal (T1) Time",
+						"value" : "1000"
+					},
+					{
+						"optionName" : "TFTP Server Name",
+						"value" : "TFTPServer"
+					},
+					{
+						"optionName" : "Vendor Class Identifier"
+					},
+					{
+						"optionName" : "NDS Context"
+					},
+					{
+						"optionName" : "NDS Servers",
+						"value" : "10.0.0.0.60 10.0.0.61"
+					},
+					{
+						"optionName" : "NDS Tree Name",
+						"value" : "NDS_Tree1"
+					},
+					{
+						"optionName" : "Netware/IP Domain Name",
+						"value" : "example.com"
+					},
+					{
+						"optionName" : "Netware/IP Information",
+						"childOption" : [
+							{
+								"optionName" : "NWIP Setting",
+								"value" : "NWIP_EXIST_IN_OPTIONS_AREA",
+								"childOption" : [
+									{
+										"optionName" : "AUTORETRIES",
+										"value" : "1000"
+									},
+									{
+										"optionName" : "AUTORETRY_SECS",
+										"value" : "1000"
+									},
+									{
+										"optionName" : "NEAREST_NWIP_SERVER",
+										"value" : "10.0.0.62 10.0.0.63"
+									},
+									{
+										"optionName" : "NSQ_BROADCAST",
+										"value" : "<Not Set>"
+									},
+									{
+										"optionName" : "NWIP_1_1",
+										"value" : "<Not Set>"
+									},
+									{
+										"optionName" : "PREFERRED_DSS",
+										"value" : "10.0.0.64"
+									},
+									{
+										"optionName" : "PRIMARY_DSS",
+										"value" : "10.0.0.65"
+									}
+								]
+							}
+						]
+					},
+					{
+						"optionName" : "Auto Configuration of IPv4 Clients",
+						"value" : "False"
+					},
+					{
+						"optionName" : "SLP Directory Agent",
+						"childOption" : [
+							{
+								"optionName" : "Directory Agent Address",
+								"value" : "10.0.0.66"
+							},
+							{
+								"optionName" : "Mandatory",
+								"value" : "false"
+							}
+						]
+					},
+					{
+						"optionName" : "SLP Service Scope",
+						"childOption" : [
+							{
+								"optionName" : "Mandatory",
+								"value" : "false"
+							},
+							{
+								"optionName" : "Scope List",
+								"value" : "192.168.88.3-192.168.88.7, 192.168.88.8-192.168.88.20"
+							}
+						]
+					},
+					{
+						"optionName" : "User Authentication Protocol"
+					},
+					{
+						"optionName" : "Domain Search Option"
+					}
+				]
+			}
+		},
+		"DhcpOptTemplate" : {
+			"type" : "object",
+			"required" : [],
+			"properties" : {
+				"infraType" : {
+					"type" : "string",
+					"description" : "Type of Infrastructure"
+				},
+				"address" : {
+					"type" : "string",
+					"description" : "Address of Subnet/Object"
+				},
+				"templateName" : {
+					"type" : "string",
+					"description" : "Name of DHCP template"
+				},
+				"option" : {
+					"type" : "array",
+					"items" : {
+						"$ref" : "#/definitions/option"
+					}
+				}
+			},
+			"example" : {
+				"infraType" : "SUBNET",
+				"address" : "10.1.1.0",
+				"templateName" : "testDhcpOptTmpl",
+				"option" : [
+					{
+						"optionName" : "Boot File Size",
+						"value" : "20"
+					}
+				]
+			}
+		},
+		"option" : {
+			"type" : "object",
+			"properties" : {
+				"optionName" : {
+					"type" : "string",
+					"description" : "Name of option"
+				},
+				"value" : {
+					"type" : "string",
+					"description" : "Value of option"
+				},
+				"childOption" : {
+					"type" : "object",
+					"properties" : {
+						"options" : {
+							"type" : "array",
+							"items" : {
+								"$ref" : "#/definitions/childOptionLv1"
+							}
+						}
+					}
+				}
+			}
+		},
+		"childOptionLv1" : {
+			"title" : "option",
+			"type" : "object",
+			"properties" : {
+				"optionName" : {
+					"type" : "string",
+					"description" : "Name of option"
+				},
+				"value" : {
+					"type" : "string",
+					"description" : "Value of option"
+				},
+				"childOption" : {
+					"type" : "object",
+					"properties" : {
+						"options" : {
+							"type" : "array",
+							"items" : {
+								"$ref" : "#/definitions/childOptionLv2"
+							}
+						}
+							}
+						}
+					}
+		},
+		"childOptionLv2" : {
+			"title" : "option",
+			"type" : "object",
+			"properties" : {
+				"optionName" : {
+					"type" : "string",
+					"description" : "Name of option"
+				},
+				"value" : {
+					"type" : "string",
+					"description" : "Value of option"
+				}
+			}
+		},
+		"searchoptiontemplatebyoptnum" : {
+			"type" : "object",
+			"properties" : {
+				"templateName" : {
+					"type" : "string",
+					"description" : "The list name of DHCP Option Template"
+				}
+			},
+			"example" : {
+				"templateName" : [
+					"ExampleTemplate1",
+					"ExampleTemplate2"
+				]
+			}
+		},
+		"searchoptiontemplatebyname" : {
+			"type" : "object",
+			"properties" : {
+				"dhcpServerNames" : {
+					"type" : "string",
+					"description" : "The list DHCP Server name is accsociated with DHCP Option Template"
+				},
+				"subnetOrgNames" : {
+					"type" : "string",
+					"description" : "The list Subnet Organization name is accsociated with DHCP Option Template"
+				},
+				"clientClassNames" : {
+					"type" : "string",
+					"description" : "The list Client Class name is accsociated with DHCP Option Template"
+				},
+				"subnetIpAddrs" : {
+					"type" : "string",
+					"description" : "The list Subnet IP Addresses is accsociated with DHCP Option Template"
+				},
+				"objIpAddrs" : {
+					"type" : "string",
+					"description" : "The list Object IP Addresses is accsociated with DHCP Option Template"
+				}
+			},
+			"example" : {
+				"dhcpServerNames" : [
+					"DhcpServer1.com",
+					"DhcpServer2.com"
+				],
+				"subnetOrgNames" : [
+					"SubnetOgr1",
+					"SubnetOgr2"
+				],
+				"clientClassNames" : [
+					"Clientclass1",
+					"Clientclass2"
+				],
+				"subnetIpAddrs" : [
+					"10.10.10.0",
+					"11.11.11.0"
+				],
+				"objIpAddrs" : [
+					"10.10.10.10",
+					"11.11.11.11"
+				]
+			}		
+		}
+	}
+}

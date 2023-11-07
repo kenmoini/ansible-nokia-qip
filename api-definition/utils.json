@@ -1,0 +1,210 @@
+{
+    "decodeX509Certificate": {
+        "post": {
+            "description": "Decode base64-encoded certificate",
+            "operationId": "decodeX509Certificate",
+            "summary": "Decode encoded certificate",
+            "tags": [
+                "Utilities"
+            ],
+            "consumes": [
+                "application/json",
+                "application/xml"
+            ],
+            "parameters": [
+                {
+                    "name": "Authentication",
+                    "in": "header",
+                    "description": "Token tokenValue<br>or<br>\nBasic username:password<br>or<br>\nLeave blank if using Client Certificate Authentication\n",
+                    "required": false,
+                    "type": "string",
+                    "format": "string"
+                },
+                {
+                    "name": "certificate",
+                    "in": "body",
+                    "description": "Encoded certificate",
+                    "required": true,
+                    "schema": {
+                        "type": "string",
+                        "example": "MIIDRzCCAi+gAwIBAgIEBrAUNDANBgkqhkiG9w0BAQsFADBMQswCQYDVQQGEwJWTjENMAsGA1..."
+                    }
+
+                }
+            ],
+            "responses": {
+                "200": {
+                    "description": "OK",
+                    "schema": {
+                        "$ref": "#/definitions/X509Certificate"
+                    }
+                },
+                "400": {
+                    "description": "Invalid certificate.",
+                    "schema": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    },
+    "generateKeyPair": {
+        "post": {
+            "description": "Generate certificate key pair (self-signed)",
+            "operationId": "generateKeyPair",
+            "summary": "Generate certificate key pair (self-signed)",
+            "tags": [
+                "Utilities"
+            ],
+            "consumes": [
+                "application/json",
+                "application/xml"
+            ],
+            "parameters": [
+                {
+                    "name": "Authentication",
+                    "in": "header",
+                    "description": "Token tokenValue<br>or<br>\nBasic username:password<br>or<br>\nLeave blank if using Client Certificate Authentication\n",
+                    "required": false,
+                    "type": "string",
+                    "format": "string"
+                },
+                {
+                    "name": "requestBody",
+                    "in": "body",
+                    "description": "Certificate information request body",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/definitions/CertificateInformation"
+                    }
+                }
+            ],
+            "responses": {
+                "200": {
+                    "description": "OK",
+                    "schema": {
+                        "$ref": "#/definitions/KeyPairCertificate"
+                    }
+                },
+                "400": {
+                    "description": "Required Field(s) Missing: [field]\n\nInvalid expiration date.",
+                    "schema": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "X509Certificate": {
+            "type": "object",
+            "properties": {
+                "serialNumber": {
+                    "type": "string",
+                    "description": "Serial number of the certificate"
+                },
+                "version": {
+                    "type": "integer",
+                    "description": "Version of the certificate"
+                },
+                "issuerDN": {
+                    "type": "string",
+                    "description": "The issuer distinguished name"
+                },
+                "subjectDN": {
+                    "type": "string",
+                    "description": "The subject name"
+                },
+                "publicKey": {
+                    "type": "string",
+                    "description": "The public key from this certificate"
+                },
+                "sigAlgName": {
+                    "type": "string",
+                    "description": "The signature algorithm name"
+                },
+                "notBefore": {
+                    "type": "string",
+                    "description": "The start date of the validity period with following date format: yyyy-MM-dd HH:mm z"
+                },
+                "notAfter": {
+                    "type": "string",
+                    "description": "The end date of the validity period with following date format: yyyy-MM-dd HH:mm z"
+                }
+            }
+        },
+        "KeyPairCertificate": {
+            "type": "object",
+            "properties": {
+                "privateKey": {
+                    "type": "string",
+                    "description": "The base-64 ENCODED Key"
+                },
+                "certificate": {
+                    "type": "string",
+                    "description": "The Self-Signed X.509 Certificate"
+                }
+            }
+        },
+        "CertificateInformation": {
+            "type": "object",
+            "required": [
+                "commonName"
+            ],
+            "properties": {
+                "expirationDate": {
+                    "type": "string",
+                    "description": "The expiration date of certificate, support the following date formats: yyyy-MM-dd"
+                },
+                "commonName": {
+                    "type": "string",
+                    "description": " Common name of a person"
+                },
+                "organizationUnit": {
+                    "type": "string",
+                    "description": "Small organization name"
+                },
+                "organizationName": {
+                    "type": "string",
+                    "description": "Large organization name"
+                },
+                "localityName": {
+                    "type": "string",
+                    "description": "Locality (city) name"
+                },
+                "stateName": {
+                    "type": "string",
+                    "description": "State or province name"
+                },
+                "country": {
+                    "type": "string",
+                    "description": "Two-letter country code"
+                }
+            },
+            "example": {
+                "expirationDate": "2030-06-28",
+                "commonName": "qipman",
+                "organizationUnit": "Vital QIP",
+                "organizationName": "NOKIA",
+                "localityName": "San Francisco",
+                "stateName": "California",
+                "country": "US"
+            }
+        },
+		"Authentication": {
+			"name": "Authentication",
+			"in": "header",
+			"description": "Token tokenValue<br>or<br>\nBasic username:password<br>or<br>\nLeave blank if using Client Certificate Authentication\n",
+			"required": false,
+			"type": "string",
+			"format": "string"
+		},
+		"Organization" : {
+			"in": "path",
+			"name": "orgName",
+			"description": "Organization name",
+			"required": true,
+			"type": "string"
+		}
+    }
+}

@@ -1,0 +1,154 @@
+{
+    "qipSearch": {
+        "get": {
+            "description": "Search through various name or address fields in the database and returns the address, name and object type of records matching the search criteria.",
+            "operationId": "qipSearch",
+            "summary": "qip-search",
+            "tags": [
+                "qip-search"
+            ],
+            "consumes": [
+                "application/json",
+                "application/xml"
+            ],
+            "parameters": [
+                {
+                    "name": "Authentication",
+                    "in": "header",
+                    "description": "Token tokenValue<br>or<br>\nBasic username:password<br>or<br>\nLeave blank if using Client Certificate Authentication\n",
+                    "required": false,
+                    "type": "string"
+                },
+                {
+                    "name": "Content-Type",
+                    "in": "header",
+                    "required": true,
+                    "type": "string",
+                    "enum": [
+                        "application/json",
+                        "application/xml"
+                    ]
+                },
+                {
+                    "in": "path",
+                    "name": "orgName",
+                    "description": "Organization Name",
+                    "required": true,
+                    "type": "string"
+                },
+                {
+                    "in": "query",
+                    "name": "name",
+                    "description": "Specifies the name which you are searching for. Support the wildcard search with following forms: &#10033; or &#10033;abc or abc&#10033; or a&#10033;c;",
+                    "required": false,
+                    "type": "string"
+                },
+                {
+                    "in": "query",
+                    "name": "address",
+                    "description": "Specifies the IP address which you are searching for. IPv4 / IPv6 address or IPv6 address/prefix length can be use.",
+                    "required": false,
+                    "type": "string"
+                },
+                {
+                    "in": "query",
+                    "name": "searchType",
+                    "description": "Specifies the search type that you want to search for. One of following values:\n\n'All',</br>'Subnetorg',</br>'Domain',</br>'Network',</br>'Object',</br>'Router Group',</br>'Mac Address' (For searching  MAC Address in Object and D-DHCP Object),</br>'Resource Record',</br>'v6address',</br>'v6block',</br>'v6subnet',</br>'v6range',</br>'v6pool'.\n\nThe default value is \"All\".",
+                    "required": false,
+                    "type": "string"
+                },
+                {
+                    "in": "query",
+                    "name": "subSearchType",
+                    "description": "The search type within the search_type value (above).\nThis option is only relevant when your searchType is\n\"ResourceRecord\". One of following values:\n\n'All',</br>'Object',</br>'Domain',</br>'ReverseZone'.\n\nThe default value is \"All\".",
+                    "required": false,
+                    "type": "string"
+                },
+                {
+                    "in": "query",
+                    "name": "subRange",
+                    "description": "Specifies the \"Resource Record\" type.One of following values:\n\n'All',</br>'CNAME',</br>'A',</br>'HINFO',</br> 'MX',</br>'NS',</br>'PTR',</br> 'TXT',</br>'WKS',</br>'AAAA',</br> 'AFSDB',</br>'MB',</br>'MG',</br> 'MINFO',</br> 'MR',</br>'ISDN',</br>'SRV',</br> 'X25'. \n\nThe default value is \"All\".",
+                    "required": false,
+                    "type": "string"
+                },
+                {
+                    "in": "query",
+                    "name": "target",
+                    "description": "Specifies the search target. This\nparameter is only relevant if your search_type is\n\"ResourceRecord\". One of following values:\n\n'both',</br>'owner',</br>'data'.\n\nThe default value is \"both\".",
+                    "required": false,
+                    "type": "string"
+                },
+                {
+                    "in": "path",
+                    "name": "extension",
+                    "description": ".json for a response in JSON format.<br> \n.xml for a response in XML format.\n",
+                    "required": true,
+                    "type": "string",
+                    "enum": [
+                        ".json",
+                        ".xml"
+                    ]
+                }
+            ],
+            "responses": {
+                "200": {
+                    "description": "OK",
+                    "schema": {
+                        "$ref": "#/definitions/QipSearchResponse"
+                    }
+                },
+                "400": {
+                    "description": "Please enter a query parameter for searching.",
+                    "schema": {
+                        "type": "string"
+                    }
+                },
+                "404": {
+                    "description": "Cannot find {0} where {1} = {2}",
+                    "schema": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "QipSearchResponse": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "Name of SubnetOrg, Domain, Network, Object, Router Group, Resource Record, V6Address, V6Block, V6Subnet, V6Range, V6Pool, All"
+                },
+                "address": {
+                    "type": "string",
+                    "description": "Address of Network, Object, Mac Address, V6Address, V6Block, V6Subnet, V6Range, V6Pool, All"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Infrastructure Type. One of following values:\n\n'All',\n'SubnetOrg',\n'Domain',\n'Network',\n 'Object',\n'Router Group',\n'Mac Address',\n'Resource Record',\n'V6Address',\n'V6Block',\n'V6Subnet',\n'V6Range',\n'V6Pool'"
+                },
+                "rr": {
+                    "$ref": "#/definitions/RRResponse"
+                }
+            }
+        },
+        "RRResponse": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "Name of Resource Record"
+                },
+                "recordType": {
+                    "type": "string",
+                    "description": "Resource Record Types"
+                },
+                "data": {
+                    "type": "string",
+                    "description": "Data"
+                }
+            }
+        }
+    }
+}

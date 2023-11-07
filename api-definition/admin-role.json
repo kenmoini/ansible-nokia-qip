@@ -1,0 +1,628 @@
+{
+  "post": {
+    "summary": "Create an administrator role.",
+    "description": "Create an administrator role.",
+    "operationId": "createAdminRole",
+    "tags": [
+      "Admin"
+    ],
+    "parameters": [
+      {
+        "name": "Authentication",
+        "in": "header",
+        "description": "Token tokenValue<br>or<br>\nBasic loginName:password<br>or<br>\nLeave blank if using Client Certificate Authentication\n",
+        "required": false,
+        "type": "string"
+      },
+      {
+        "in": "path",
+        "name": "orgName",
+        "description": "Organization Name",
+        "required": true,
+        "type": "string"
+      },
+      {
+        "name": "requestBody",
+        "in": "body",
+        "description": "Request body",
+        "required": true,
+        "schema": {
+          "$ref": "#/definitions/AdminRoleRestModel"
+        }
+      }
+    ],
+    "responses": {
+      "201": {
+        "description": "Created"
+      },
+      "400": {
+        "description": "Required Field(s) Missing: [fieldName]"
+      },
+      "403": {
+        "description": "Permission Denied. You do not have appropriate privileges to perform this action."
+      },
+      "409": {
+        "description": "Administrator role [adminRoleName] already exists."
+      }
+    }
+  },
+  "roleUpdateAndDelete": {
+    "put": {
+      "summary": "Modify an administrator role.",
+      "description": "Modify an administrator role.",
+      "operationId": "modifyAdminRole",
+      "tags": [
+        "Admin"
+      ],
+      "parameters": [
+        {
+          "name": "Authentication",
+          "in": "header",
+          "description": "Token tokenValue<br>or<br>\nBasic loginName:password<br>or<br>\nLeave blank if using Client Certificate Authentication\n",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "in": "path",
+          "name": "orgName",
+          "description": "Organization Name",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "in": "path",
+          "name": "adminRoleName",
+          "description": "Administrator Role Name",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "requestBody",
+          "in": "body",
+          "description": "Request body",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/modify/AdminRoleRestModel"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK"
+        },
+        "403": {
+          "description": "Permission Denied. You do not have appropriate privileges to perform this action."
+        },
+        "404": {
+          "description": "Administrator role [adminRoleName] was not found."
+        }
+      }
+    },
+    "delete": {
+      "summary": "Delete an administrator role.",
+      "description": "Delete an administrator role.",
+      "operationId": "deleteAdminRole",
+      "tags": [
+        "Admin"
+      ],
+      "parameters": [
+        {
+          "name": "Authentication",
+          "in": "header",
+          "description": "Token tokenValue<br>or<br>\nBasic loginName:password<br>or<br>\nLeave blank if using Client Certificate Authentication\n",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "in": "path",
+          "name": "orgName",
+          "description": "Organization Name",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "in": "path",
+          "name": "adminRoleName",
+          "description": "Administrator Role Name",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "responses": {
+        "204": {
+          "description": "No Content. (The administrator role was deleted)"
+        },
+        "403": {
+          "description": "Permission Denied. You do not have appropriate privileges to perform this action."
+        },
+        "404": {
+          "description": "Administrator role [adminRoleName] was not found."
+        }
+      }
+    }
+  },
+  "search": {
+    "get": {
+      "summary": "Search administrator role.",
+      "description": "Search administrator role by administrator role name.",
+      "operationId": "searchAdminRole",
+      "tags": [
+        "Admin"
+      ],
+      "parameters": [
+        {
+          "name": "Authentication",
+          "in": "header",
+          "description": "Token tokenValue<br>or<br>\nBasic loginName:password<br>or<br>\nLeave blank if using Client Certificate Authentication\n",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "in": "path",
+          "name": "orgName",
+          "description": "Organization Name",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "in": "path",
+          "name": "extension",
+          "description": ".json for a response in JSON format.<br> \n.xml for a response in XML format.\n",
+          "required": true,
+          "type": "string",
+          "enum": [
+            ".json",
+            ".xml"
+          ]
+        },
+        {
+          "in": "query",
+          "name": "adminRoleName",
+          "description": "Searching key of administrator role name.\nYou can use an asterisk (*) as a wildcard character to \nreturn a range of results.",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "in": "query",
+          "name": "pageIndex",
+          "description": "Page index. Default value is 1.",
+          "required": false,
+          "type": "integer"
+        },
+        {
+          "in": "query",
+          "name": "pageSize",
+          "description": "Page size. Default value is 25.",
+          "required": false,
+          "type": "integer"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "schema": {
+            "$ref": "#/definitions/SearchD/list"
+          }
+        },
+        "406": {
+          "description": "Paginated list indexes start at 1"
+        }
+      }
+    }
+  },
+  "assignedAdmin": {
+    "get": {
+      "summary": "Get assigned administrator name list by administrator role.",
+      "description": "Get assigned administrator name list by administrator role.",
+      "operationId": "searchAdminRoleAssignedAdmin",
+      "tags": [
+        "Admin"
+      ],
+      "parameters": [
+        {
+          "name": "Authentication",
+          "in": "header",
+          "description": "Token tokenValue<br>or<br>\nBasic loginName:password<br>or<br>\nLeave blank if using Client Certificate Authentication\n",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "in": "path",
+          "name": "orgName",
+          "description": "Organization Name",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "in": "path",
+          "name": "extension",
+          "description": ".json for a response in JSON format.<br> \n.xml for a response in XML format.\n",
+          "required": true,
+          "type": "string",
+          "enum": [
+            ".json",
+            ".xml"
+          ]
+        },
+        {
+          "in": "path",
+          "name": "adminRoleName",
+          "description": "Administrator Role Name.",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "in": "query",
+          "name": "pageIndex",
+          "description": "Page index. Default value is 1.",
+          "required": false,
+          "type": "integer"
+        },
+        {
+          "in": "query",
+          "name": "pageSize",
+          "description": "Page size. Default value is 25.",
+          "required": false,
+          "type": "integer"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "schema": {
+            "$ref": "#/definitions/AssignedAdminD/list"
+          }
+        },
+        "404": {
+          "description": "Administrator role [adminRoleName] was not found."
+        },
+        "406": {
+          "description": "Paginated list indexes start at 1"
+        }
+      }
+    }
+  },
+  "getManagedListD": {
+    "get": {
+      "summary": "Get the managed list of an administrator role by role name.",
+      "description": "Get the managed list of an administrator role by role name.",
+      "operationId": "getAdminRoleManagedList",
+      "tags": [
+        "Admin"
+      ],
+      "parameters": [
+        {
+          "name": "Authentication",
+          "in": "header",
+          "description": "Token tokenValue<br>or<br>\nBasic loginName:password<br>or<br>\nLeave blank if using Client Certificate Authentication\n",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "in": "path",
+          "name": "orgName",
+          "description": "Organization Name",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "in": "path",
+          "name": "extension",
+          "description": ".json for a response in JSON format.<br> \n.xml for a response in XML format.\n",
+          "required": true,
+          "type": "string",
+          "enum": [
+            ".json",
+            ".xml"
+          ]
+        },
+        {
+          "in": "path",
+          "name": "adminRoleName",
+          "description": "Administrator Role Name.",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "schema": {
+            "$ref": "#/definitions/ManagedListD/list"
+          }
+        },
+        "404": {
+          "description": "Administrator role [adminRoleName] was not found."
+        }
+      }
+    }
+  },
+  "managedList": {
+    "post": {
+      "summary": "Assign a managed list for an administrator role.",
+      "description": "Assign a managed list for an administrator role.",
+      "operationId": "assignAdminRoleManagedList",
+      "tags": [
+        "Admin"
+      ],
+      "parameters": [
+        {
+          "name": "Authentication",
+          "in": "header",
+          "description": "Token tokenValue<br>or<br>\nBasic loginName:password<br>or<br>\nLeave blank if using Client Certificate Authentication\n",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "in": "path",
+          "name": "orgName",
+          "description": "Organization Name",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "in": "path",
+          "name": "extension",
+          "description": ".json for a response in JSON format.<br> \n.xml for a response in XML format.\n",
+          "required": true,
+          "type": "string",
+          "enum": [
+            ".json",
+            ".xml"
+          ]
+        },
+        {
+          "in": "path",
+          "name": "adminRoleName",
+          "description": "Administrator Role Name.",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "requestBody",
+          "in": "body",
+          "description": "Request body",
+          "required": true,
+          "schema": {
+            "$ref": "#/definitions/ManagedListD/list"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK"
+        },
+        "403": {
+          "description": "Permission Denied. You do not have appropriate privileges to perform this action."
+        },
+        "404": {
+          "description": "Administrator role [adminRoleName] was not found."
+        },
+        "422": {
+          "description": "Invalid, item type [itemType].\n\nInvalid value of accessPermission when assigning item [itemName]."
+        }
+      }
+    }
+  },
+  "definitions": {
+    "AdminRoleRestModel": {
+      "type": "object",
+      "description": "Administrator role model",
+      "required": [
+        "adminRoleName"
+      ],
+      "properties": {
+        "adminRoleName": {
+          "type": "string",
+          "description": "Administrator role name"
+        },
+        "adminRoleDescription": {
+          "type": "string",
+          "description": "Administrator role description"
+        }
+      },
+      "example": {
+        "adminRoleName": "string",
+        "adminRoleDescription": "string"
+      }
+    },
+    "modify": {
+      "AdminRoleRestModel": {
+        "type": "object",
+        "description": "Administrator role model",
+        "properties": {
+          "adminRoleName": {
+            "type": "string",
+            "description": "Administrator role name"
+          },
+          "adminRoleDescription": {
+            "type": "string",
+            "description": "Administrator role description"
+          }
+        },
+        "example": {
+          "adminRoleName": "string",
+          "adminRoleDescription": "string"
+        }
+      }
+    },
+    "AssignedAdminD": {
+      "list": {
+        "type": "object",
+        "description": "Administrator name rest model",
+        "properties": {
+          "AdminNameRestModel": {
+            "type": "array",
+            "description": "List of assigned administrator names",
+            "items": {
+              "type": "string",
+              "description": "Login name"
+            },
+            "example": [
+              {
+                "loginName": "string"
+              },
+              {
+                "loginName": "string"
+              }
+            ]
+          }
+        },
+        "example": {
+          "list": [
+            {
+              "loginName": "string"
+            },
+            {
+              "loginName": "string"
+            }
+          ]
+        }
+      }
+    },
+    "SearchD": {
+      "list": {
+        "type": "object",
+        "description": "Search administrator role result",
+        "properties": {
+          "AdminRoleRestModel": {
+            "type": "array",
+            "description": "List of administrator roles",
+            "items": {
+              "type": "object",
+              "description": "Administrator Role Rest Model",
+              "properties": {
+                "adminRoleName": {
+                  "type": "string",
+                  "description": "Administrator Role Name"
+                },
+                "adminRoleDescription": {
+                  "type": "string",
+                  "description": "Administrator Role Description"
+                }
+              }
+            },
+            "example": [
+              {
+                "adminRoleName": "string",
+                "adminRoleDescription": "string"
+              },
+              {
+                "adminRoleName": "string",
+                "adminRoleDescription": "string"
+              }
+            ]
+          }
+        },
+        "example": {
+          "list": [
+            {
+              "adminRoleName": "string",
+              "adminRoleDescription": "string"
+            },
+            {
+              "adminRoleName": "string",
+              "adminRoleDescription": "string"
+            }
+          ]
+        }
+      }
+    },
+    "ManagedListD": {
+      "list": {
+        "type": "object",
+        "description": "Administrator managed list",
+        "properties": {
+          "ManagedListRestModel": {
+            "type": "array",
+            "description": "Managed list",
+            "items": {
+              "type": "object",
+              "properties": {
+                "itemType": {
+                  "type": "string",
+                  "description": "Item type : Role, QIPApp, BootPServer, DcServer, DhcpServer, DnsServer, Domain, V4Object, V4AddressRange, V4ObjectRange, V4Subnet, Network, OSPF, SubnetOrg, V6Pool, V6Subnet, V6Range, DhcpV6Server"
+                },
+                "itemsList": {
+                  "type": "array",
+                  "description": "Items list",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "itemName": {
+                        "type": "string",
+                        "description": "Item Name"
+                      },
+                      "accessPermission": {
+                        "type": "string",
+                        "description": "Access Permission: Write, Read"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "example": [
+              {
+                "itemType": "string",
+                "itemsList": [
+                  {
+                    "itemName": "string",
+                    "accessPermission": "Write"
+                  },
+                  {
+                    "itemName": "string",
+                    "accessPermission": "Read"
+                  }
+                ]
+              },
+              {
+                "itemType": "string",
+                "itemsList": [
+                  {
+                    "itemName": "string",
+                    "accessPermission": "Write"
+                  },
+                  {
+                    "itemName": "string",
+                    "accessPermission": "Read"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "example": {
+          "list": [
+            {
+              "itemType": "string",
+              "itemsList": [
+                {
+                  "itemName": "string",
+                  "accessPermission": "Write"
+                },
+                {
+                  "itemName": "string",
+                  "accessPermission": "Read"
+                }
+              ]
+            },
+            {
+              "itemType": "string",
+              "itemsList": [
+                {
+                  "itemName": "string",
+                  "accessPermission": "Write"
+                },
+                {
+                  "itemName": "string",
+                  "accessPermission": "Read"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+}
