@@ -1,7 +1,7 @@
 ---
 - name: Get the list of IP addresses in a v4 Subnet
   ansible.builtin.uri:
-    url: https://{{ qip_host }}/api/v1/{{ org_name }}/v4subnet/{{ v4_subnet_id }}/v4addresses.{{ response_extension }}
+    url: https://{{ qip_host }}/api/v1/{{ org_name | ansible.builtin.urlencode }}/v4subnet/{{ v4_subnet_id }}/v4addresses.{{ response_extension }}
     method: GET
     headers:
       Authentication: "{{ qip_token }}"
