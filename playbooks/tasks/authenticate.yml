@@ -10,6 +10,7 @@
     validate_certs: false
     return_content: true
     status_code: 200
+  register: qip_token_response
 
 - name: Debug output
   ansible.builtin.debug:
