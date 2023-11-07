@@ -4,7 +4,8 @@
     url: https://{{ qip_host }}/api/v1/{{ org_name | urlencode }}/v4subnet/{{ v4_subnet_id }}/v4addresses.{{ response_extension }}
     method: GET
     headers:
-      Authentication: "{{ qip_token }}"
+      #Authentication: "{{ qip_token }}"
+      Authentication: "{{ qip_username }}:{{ qip_password }}"
     body_format: json
     validate_certs: false
     return_content: true
@@ -14,4 +15,3 @@
 - name: Debug output
   ansible.builtin.debug:
     msg: "{{ qip_get_v4_subnet_addresses_response }}"
-
